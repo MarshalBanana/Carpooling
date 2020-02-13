@@ -198,7 +198,7 @@ class AppState with ChangeNotifier {
         apiKey: apiKey,
         mode: Mode.overlay, // Mode.fullscreen
         language: "en",
-        components: [new Component(Component.country, "usa")]);
+        components: [new Component(Component.country, "sa")]);
 
     destinationController.text = prediction.description;
     notifyListeners();
