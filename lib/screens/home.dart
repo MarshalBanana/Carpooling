@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:carpooling/state/app_states.dart';
+import 'package:google_maps_webservice/places.dart';
 import 'package:provider/provider.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -33,30 +35,34 @@ class _MapState extends State<Map> {
       child: appState.initialPosition == null
           ? Container(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-              SpinKitFadingCube(
-              color: Colors.yellow,
-                size: 50.0,
-              )
-                    ],
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    SpinKitFadingCube(
+                      color: Colors.yellow,
+                      size: 50.0,
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Visibility(
+                  visible: appState.locationServiceActive == false,
+                  child: Text(
+                    "Please enable location services!",
+                    style: TextStyle(color: Colors.black, fontSize: 18),
                   ),
-                  SizedBox(height: 20,),
-                  Visibility(
-                    visible: appState.locationServiceActive == false,
-                    child: Text("Please enable location services!", style: TextStyle(color: Colors.black, fontSize: 18),),
-                  )
-                ],
-              )
-            )
-          :  Stack(
+                )
+              ],
+            ))
+          : Stack(
               children: <Widget>[
                 GoogleMap(
-                  initialCameraPosition:
-                      CameraPosition(target: appState.initialPosition, zoom: 10),
+                  initialCameraPosition: CameraPosition(
+                      target: appState.initialPosition, zoom: 10),
                   onMapCreated: appState.onCreated,
                   myLocationEnabled: true,
                   //mapToolbarEnabled: true,
@@ -122,6 +128,18 @@ class _MapState extends State<Map> {
                       ],
                     ),
                     child: TextField(
+                      onTap: () async {
+                        // Prediction prediction = await PlacesAutocomplete.show(
+                        //     context: context,
+                        //     apiKey: "AIzaSyAS6yFOpTAblkIYrYIxKsFpRP9caH58MYc",
+                        //     mode: Mode.fullscreen,
+                        //     language: "en",
+                        //     components: [Component(Component.locality, "eg")]);
+                        //     appState.displayPrediction(prediction);
+                        //     appState.destinationController.text = prediction.description;
+                        await appState.getOLocationAutoCOmplete(context);
+                        await appState.sendRequest(appState.prediction.description);
+                      },
                       cursorColor: Colors.black,
                       controller: appState.destinationController,
                       textInputAction: TextInputAction.go,
@@ -138,7 +156,7 @@ class _MapState extends State<Map> {
                             color: Colors.black,
                           ),
                         ),
-                        hintText: "destination?",
+                        hintText: "destination",
                         border: InputBorder.none,
                         contentPadding: EdgeInsets.only(left: 15.0, top: 16.0),
                       ),
@@ -147,6 +165,6 @@ class _MapState extends State<Map> {
                 ),
               ],
             ),
-        );
+    );
   }
 }

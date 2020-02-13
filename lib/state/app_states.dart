@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_google_places/flutter_google_places.dart';
+import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:carpooling/requests/google_maps_requests.dart';
+import 'package:google_maps_webservice/places.dart';
 
 class AppState with ChangeNotifier {
   static LatLng _initialPosition;
@@ -12,6 +15,8 @@ class AppState with ChangeNotifier {
   TextEditingController locationController = TextEditingController();
   TextEditingController destinationController = TextEditingController();
   bool locationServiceActive = true;
+  GoogleMapsPlaces _places = GoogleMapsPlaces(apiKey: "AIzaSyAS6yFOpTAblkIYrYIxKsFpRP9caH58MYc");
+  Prediction prediction ;
 
   LatLng get initialPosition => _initialPosition;
   LatLng get lastPosition => _lastPosition;
@@ -19,6 +24,7 @@ class AppState with ChangeNotifier {
   GoogleMapController get mapController => _mapController; 
   Set<Marker> get markers => _markers;
   Set<Polyline> get polylines => _polyLines;
+  GoogleMapsPlaces get places => _places;
 
   final Set<Marker> _markers = {};
   final Set<Polyline> _polyLines = {};
@@ -106,17 +112,39 @@ class AppState with ChangeNotifier {
   }
 
 // THIS IS TO SEND REQUESTS TO THE GOOGLE MAPS API
-  void sendRequest(String intendedLocation) async {
+  // void sendRequest(String intendedLocation) async {
+  //   List<Placemark> placemark =
+  //       await Geolocator().placemarkFromAddress(intendedLocation);
+  //   double latitude = placemark[0].position.latitude;
+  //   double longitude = placemark[0].position.longitude;
+  //   LatLng destination = LatLng(latitude, longitude);
+  //   _addMarker(destination, intendedLocation);
+  //   String route = await _googleMapsServices.getRouteCoordinates(
+  //       _initialPosition, destination);
+  //   print(route.toString());
+  //   createRoute(route);
+  //   notifyListeners();
+  // }
+  void sendRequest(String userDistenation) async {
     List<Placemark> placemark =
-        await Geolocator().placemarkFromAddress(intendedLocation);
-    double latitude = placemark[0].position.latitude;
-    double longitude = placemark[0].position.longitude;
-    LatLng destination = LatLng(latitude, longitude);
-    _addMarker(destination, intendedLocation);
-    String route = await _googleMapsServices.getRouteCoordinates(
-        _initialPosition, destination);
-    print(route.toString());
-    createRoute(route);
+        await Geolocator().placemarkFromAddress(userDistenation);
+    // double latitude = placemark[0].position.latitude;
+    // double longitude = placemark[0].position.longitude;
+    // LatLng destination = LatLng(latitude, longitude);
+
+      // get detail (lat/lng)
+      PlacesDetailsResponse detail =
+          await _places.getDetailsByPlaceId(prediction.placeId);
+      final lat = detail.result.geometry.location.lat;
+      final lng = detail.result.geometry.location.lng;
+
+      LatLng destination = LatLng(lat, lng);
+      _addMarker(destination, userDistenation);
+      String route = await _googleMapsServices.getRouteCoordinates(
+          initialPosition, destination);
+      print("$lat,$lng");
+      createRoute(route);
+
     notifyListeners();
   }
 
@@ -142,5 +170,40 @@ class AppState with ChangeNotifier {
       }
     });
 
-}
+  }
+
+
+
+  void displayPrediction(Prediction prediction) async {
+    if (prediction != null) {
+      PlacesDetailsResponse detail =
+      await _places.getDetailsByPlaceId(prediction.placeId);
+
+      var placeId = prediction.placeId;
+      double lat = detail.result.geometry.location.lat;
+      double lng = detail.result.geometry.location.lng;
+      LatLng place = LatLng(lat, lng);
+      var address = await Geocoder.local.findAddressesFromQuery(prediction.description);
+      print(address);
+      _addMarker(place, "place");
+      print(lat);
+      print(lng);
+      notifyListeners();
+    }
+  }
+
+  Future<void> getOLocationAutoCOmplete(BuildContext context) async {
+        prediction = await PlacesAutocomplete.show(
+        context: context,
+        apiKey: apiKey,
+        mode: Mode.overlay, // Mode.fullscreen
+        language: "en",
+        components: [new Component(Component.country, "usa")]);
+
+    destinationController.text = prediction.description;
+    notifyListeners();
+  }
+
+
+
 }
