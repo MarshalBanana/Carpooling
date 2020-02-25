@@ -17,7 +17,75 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Map());
+    return Scaffold(
+      extendBodyBehindAppBar :true,
+        appBar: AppBar(
+          iconTheme: IconThemeData(color:Colors.black),
+          automaticallyImplyLeading: true,
+          elevation: 0.0,
+          backgroundColor: Colors.transparent,
+        ),
+        drawer: Drawer(
+          // Add a ListView to the drawer. This ensures the user can scroll
+          // through the options in the drawer if there isn't enough vertical
+          // space to fit everything.
+
+          child: ListView(
+            // Important: Remove any padding from the ListView.
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              Container(
+                  height: 80.0,
+                  child: DrawerHeader(
+                    child: Text('Ride With Us'),
+                    decoration: BoxDecoration(
+                      color: Colors.limeAccent[500],
+                    ),
+                  )),
+              ListTile(
+                leading: Icon(Icons.supervised_user_circle),
+                title: GestureDetector(
+                  onTap: () {},
+                  child: Container(
+                    child: Text("Customer Support"),
+                  ),
+                ),
+                onTap: () {},
+              ),
+              ListTile(
+                leading: Icon(Icons.account_circle),
+                title: GestureDetector(
+                  onTap: () {},
+                  child: Container(
+                    child: Text("Settings"),
+                  ),
+                ),
+                onTap: () {},
+              ),
+              ListTile(
+                leading: Icon(Icons.language),
+                title: Text('Change Language to Arabic'),
+                onTap: () {
+                  // Update the state of the app
+                  // ...
+                  // Then close the drawer
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.language),
+                title: Text('Change Language to English'),
+                onTap: () {
+                  // Update the state of the app
+                  // ...
+                  // Then close the drawer
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          ),
+        ),
+        body: Map());
   }
 }
 
@@ -72,7 +140,7 @@ class _MapState extends State<Map> {
                   polylines: appState.polylines,
                 ),
                 Positioned(
-                  top: 50.0,
+                  top: 20.0,
                   right: 15.0,
                   left: 15.0,
                   child: Container(
@@ -110,7 +178,7 @@ class _MapState extends State<Map> {
                   ),
                 ),
                 Positioned(
-                  top: 105.0,
+                  top: 80.0,
                   right: 15.0,
                   left: 15.0,
                   child: Container(
@@ -138,7 +206,8 @@ class _MapState extends State<Map> {
                         //     appState.displayPrediction(prediction);
                         //     appState.destinationController.text = prediction.description;
                         await appState.getOLocationAutoCOmplete(context);
-                        await appState.sendRequest(appState.prediction.description);
+                        await appState
+                            .sendRequest(appState.prediction.description);
                       },
                       cursorColor: Colors.black,
                       controller: appState.destinationController,
