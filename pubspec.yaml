@@ -38,6 +38,7 @@ dependencies:
   flutter_spinkit: "^4.1.1"
   flutter_google_places: ^0.2.3
   geocoder: ^0.2.1
+  bubbled_navigation_bar: ^0.0.3
 
 dev_dependencies:
   flutter_test:
