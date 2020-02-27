@@ -1,3 +1,4 @@
+import 'package:carpooling/screens/loading_screen.dart';
 import 'package:carpooling/state/app_states.dart';
 import 'package:flutter/material.dart';
 import 'package:carpooling/screens/home.dart';
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: LoadingScreen(),
     );
   }
 }
