@@ -1,3 +1,5 @@
+import 'package:carpooling/screens/signin.dart';
+import 'package:carpooling/screens/signup.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_google_places/flutter_google_places.dart';
@@ -187,8 +189,8 @@ class PageViewWidget extends StatelessWidget {
       pageSnapping: true,
       children: <Widget>[
         MapScreen(appState: appState),
-        DemoRegisterScreen(), // <- this one adds a test user to the database on button click
-        DemoRegisterScreen(),
+        SignUp(), // <- this one adds a test user to the database on button click
+        SignIn(),
         DemoRegisterScreen(),
       ],
     );
