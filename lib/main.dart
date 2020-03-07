@@ -1,7 +1,7 @@
 import 'package:carpooling/screens/loading_screen.dart';
 import 'package:carpooling/state/app_states.dart';
 import 'package:flutter/material.dart';
-import 'package:carpooling/screens/home.dart';
+import 'package:carpooling/screens/organizing_screen.dart';
 import 'package:provider/provider.dart';
 
 void main() {

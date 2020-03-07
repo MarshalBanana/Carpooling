@@ -11,87 +11,87 @@ import 'package:provider/provider.dart';
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 
 import 'demo_register_screen.dart';
+import 'home.dart';
 import 'map_screen.dart';
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+class OrganizingScreen extends StatefulWidget {
+  OrganizingScreen({Key key, this.title}) : super(key: key);
   final String title;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _OrganizingScreenState createState() => _OrganizingScreenState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _OrganizingScreenState extends State<OrganizingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        extendBodyBehindAppBar: true,
-        appBar: AppBar(
-          iconTheme: IconThemeData(color: Colors.black),
-          automaticallyImplyLeading: true,
-          elevation: 0.0,
-          backgroundColor: Colors.transparent,
-        ),
-        drawer: Drawer(
-          // Add a ListView to the drawer. This ensures the user can scroll
-          // through the options in the drawer if there isn't enough vertical
-          // space to fit everything.
-
-          child: ListView(
-            // Important: Remove any padding from the ListView.
-            padding: EdgeInsets.zero,
-            children: <Widget>[
-              Container(
-                  height: 80.0,
-                  child: DrawerHeader(
-                    child: Text('Ride With Us'),
-                    decoration: BoxDecoration(
-                      color: Colors.limeAccent[500],
-                    ),
-                  )),
-              ListTile(
-                leading: Icon(Icons.supervised_user_circle),
-                title: GestureDetector(
-                  onTap: () {},
-                  child: Container(
-                    child: Text("Customer Support"),
-                  ),
-                ),
-                onTap: () {},
-              ),
-              ListTile(
-                leading: Icon(Icons.account_circle),
-                title: GestureDetector(
-                  onTap: () {},
-                  child: Container(
-                    child: Text("Settings"),
-                  ),
-                ),
-                onTap: () {},
-              ),
-              ListTile(
-                leading: Icon(Icons.language),
-                title: Text('Change Language to Arabic'),
-                onTap: () {
-                  // Update the state of the app
-                  // ...
-                  // Then close the drawer
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.language),
-                title: Text('Change Language to English'),
-                onTap: () {
-                  // Update the state of the app
-                  // ...
-                  // Then close the drawer
-                  Navigator.pop(context);
-                },
-              ),
-            ],
-          ),
-        ),
+//        extendBodyBehindAppBar: true,
+//        appBar: AppBar(
+//          iconTheme: IconThemeData(color: Colors.black),
+//          elevation: 0.0,
+//          backgroundColor: Colors.transparent,
+//        ),
+//        drawer: Drawer(
+//          // Add a ListView to the drawer. This ensures the user can scroll
+//          // through the options in the drawer if there isn't enough vertical
+//          // space to fit everything.
+//
+//          child: ListView(
+//            // Important: Remove any padding from the ListView.
+//            padding: EdgeInsets.zero,
+//            children: <Widget>[
+//              Container(
+//                  height: 80.0,
+//                  child: DrawerHeader(
+//                    child: Text('Ride With Us'),
+//                    decoration: BoxDecoration(
+//                      color: Colors.limeAccent[500],
+//                    ),
+//                  )),
+//              ListTile(
+//                leading: Icon(Icons.supervised_user_circle),
+//                title: GestureDetector(
+//                  onTap: () {},
+//                  child: Container(
+//                    child: Text("Customer Support"),
+//                  ),
+//                ),
+//                onTap: () {},
+//              ),
+//              ListTile(
+//                leading: Icon(Icons.account_circle),
+//                title: GestureDetector(
+//                  onTap: () {},
+//                  child: Container(
+//                    child: Text("Settings"),
+//                  ),
+//                ),
+//                onTap: () {},
+//              ),
+//              ListTile(
+//                leading: Icon(Icons.language),
+//                title: Text('Change Language to Arabic'),
+//                onTap: () {
+//                  // Update the state of the app
+//                  // ...
+//                  // Then close the drawer
+//                  Navigator.pop(context);
+//                },
+//              ),
+//              ListTile(
+//                leading: Icon(Icons.language),
+//                title: Text('Change Language to English'),
+//                onTap: () {
+//                  // Update the state of the app
+//                  // ...
+//                  // Then close the drawer
+//                  Navigator.pop(context);
+//                },
+//              ),
+//            ],
+//          ),
+//        ),
         body: Map());
   }
 }
@@ -189,7 +189,8 @@ class PageViewWidget extends StatelessWidget {
       },
       pageSnapping: true,
       children: <Widget>[
-        MapScreen(appState: appState),
+//        MapScreen(appState: appState),
+        HomeScreen(),
         SignUp(), // <- this one adds a test user to the database on button click
         SignIn(),
         DemoRegisterScreen(),

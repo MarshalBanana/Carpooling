@@ -3,7 +3,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 
 import '../state/app_states.dart';
-import 'home.dart';
+import 'organizing_screen.dart';
 
 class LoadingScreen extends StatelessWidget {
   @override
@@ -37,6 +37,6 @@ class LoadingScreen extends StatelessWidget {
                     ),
                   ],
                 ))
-            : MyHomePage(title: 'Flutter Demo Home Page'));
+            : OrganizingScreen(title: 'Flutter Demo Home Page'));
   }
 }
