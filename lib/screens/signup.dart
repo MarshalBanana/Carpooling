@@ -1,18 +1,21 @@
+import 'package:carpooling/screens/signin.dart';
+import 'package:carpooling/utilities/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 //import 'package:rest_app/screens/signin.dart';
 //import 'package:rest_app/services/auth_services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class SignUp extends StatefulWidget {
-  final Function toogleView;
-  SignUp({this.toogleView});
+import 'loading_screen.dart';
+
+class SignUpScreen extends StatefulWidget {
+  static const id = 'sign_up_screen';
 
   @override
-  _SignUpState createState() => _SignUpState();
+  _SignUpScreenState createState() => _SignUpScreenState();
 }
 
-class _SignUpState extends State<SignUp> {
+class _SignUpScreenState extends State<SignUpScreen> {
   final _auth = FirebaseAuth.instance;
   final _formKey = GlobalKey<FormState>();
   String email, password;
@@ -34,7 +37,8 @@ class _SignUpState extends State<SignUp> {
                 child: Container(
                   alignment: Alignment.topCenter,
                   width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height - 56,
+                  height:
+                      MediaQuery.of(context).size.height - kbottomNavBarHeight,
                   child: Stack(
                     children: <Widget>[
                       Container(
@@ -114,63 +118,59 @@ class _SignUpState extends State<SignUp> {
                                     vertical: 10, horizontal: 45),
                                 child: Column(
                                   children: <Widget>[
-                                    TextFormField(
-                                      validator: (val) =>
-                                          val.isEmpty ? "Enter Email Id" : null,
-                                      decoration: InputDecoration(
-                                        enabledBorder: UnderlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: Colors.white)),
-                                        hintText: "Email",
-                                        hintStyle: TextStyle(
-                                            color: Colors.white70,
-                                            fontSize: 15),
-                                      ),
-                                      onSaved: (val) {
-                                        email = val;
+                                    TextField(
+                                      keyboardType: TextInputType.emailAddress,
+                                      onChanged: (value) {
+                                        email = value;
                                       },
+                                      decoration: kTextFieldDecoration.copyWith(
+                                        hintText: 'Enter Your Email',
+                                      ),
                                     ),
                                     SizedBox(
                                       height: 16,
                                     ),
-                                    TextFormField(
+                                    TextField(
                                       obscureText: true,
-                                      validator: (val) =>
-                                          val.isEmpty ? "Enter Password" : null,
-                                      decoration: InputDecoration(
-                                        enabledBorder: UnderlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: Colors.white)),
-                                        hintText: "Password",
-                                        hintStyle: TextStyle(
-                                            color: Colors.white70,
-                                            fontSize: 15),
-                                      ),
-                                      onSaved: (val) {
-                                        password = val;
+                                      onChanged: (value) {
+                                        password = value;
                                       },
+                                      decoration: kTextFieldDecoration.copyWith(
+                                        hintText: 'Enter Your Password',
+                                      ),
                                     ),
                                     SizedBox(
                                       height: 30,
                                     ),
                                     GestureDetector(
                                       onTap: () async {
-                                        if (_formKey.currentState.validate()) {
-                                          _formKey.currentState.save();
+                                        try {
+//                  print(email);
+//                  print(password);
                                           setState(() {
                                             _loading = true;
                                           });
-                                          await _auth
+                                          final newUser = await _auth
                                               .createUserWithEmailAndPassword(
-                                                  email: email,
-                                                  password: password)
-                                              .then((value) {
-                                            if (value == null) {
-                                              setState(() {
-                                                _loading = false;
-                                              });
-                                            }
+                                                  email: email.trim(),
+                                                  password: password);
+
+                                          if (newUser != null) {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        LoadingScreen()));
+                                          }
+
+                                          setState(() {
+                                            _loading = false;
                                           });
+                                        } catch (e) {
+                                          setState(() {
+                                            _loading = false;
+                                          });
+                                          print(e);
                                         }
                                       },
                                       child: Container(
@@ -205,7 +205,10 @@ class _SignUpState extends State<SignUp> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                widget.toogleView();
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => SignInScreen()));
                               },
                               child: Text(
                                 "Already have an account?",

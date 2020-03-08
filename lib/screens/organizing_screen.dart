@@ -116,7 +116,7 @@ class _MapState extends State<Map> {
     });
   }
 
-  int selectedPage = 1;
+  int selectedPage = 0;
   @override
   Widget build(BuildContext context) {
     final appState = Provider.of<AppState>(context);
@@ -191,8 +191,8 @@ class PageViewWidget extends StatelessWidget {
       children: <Widget>[
 //        MapScreen(appState: appState),
         HomeScreen(),
-        SignUp(), // <- this one adds a test user to the database on button click
-        SignIn(),
+        SignUpScreen(), // <- this one adds a test user to the database on button click
+        SignInScreen(),
         DemoRegisterScreen(),
       ],
     );
