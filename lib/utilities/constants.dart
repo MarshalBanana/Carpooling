@@ -11,3 +11,7 @@ const kTextFieldDecoration = InputDecoration(
   hintText: "Email",
   hintStyle: TextStyle(color: Colors.white60, fontSize: 15),
 );
+const kmediumTitleTextStyle = TextStyle(
+    fontFamily: 'Montserrat', fontSize: 20, fontWeight: FontWeight.w600);
+const ktitleTextStyle =
+    TextStyle(fontFamily: 'Montserrat', fontSize: 30, color: Colors.white);

@@ -1,5 +1,7 @@
 import 'dart:ui';
+import 'package:carpooling/utilities/auth_service.dart';
 import 'package:carpooling/utilities/constants.dart';
+import 'package:carpooling/utilities/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 //import 'package:rest_app/services/auth_services.dart';
@@ -21,10 +23,18 @@ class _SignInScreenState extends State<SignInScreen> {
   final _formKey = GlobalKey<FormState>();
   String email = "", password = "";
   final _auth = FirebaseAuth.instance;
+  AuthService _authService;
+  FirebaseUser user;
+
+  @override
+  void initState() {
+    super.initState();
+    _authService = AuthService();
+  }
 
   /// For Fingerprint & FaceId Local Auth
 //  final LocalAuthentication _localAuthentication = LocalAuthentication();
-  String _authorizedOrNot = "Not Authorized";
+//  String _authorizedOrNot = "Not Authorized";
 //  List<BiometricType> _availableBiometricTypes = List<BiometricType>();
 //  bool _canCheckBiometric = false;
 
@@ -61,28 +71,28 @@ class _SignInScreenState extends State<SignInScreen> {
 //    });
 //  }
 
-  Future<void> _authorizeNow() async {
-    bool isAuthorized = false;
-//    try {
-//      isAuthorized = await _localAuthentication.authenticateWithBiometrics(
-//        localizedReason: "Please authenticate to complete your transaction",
-//        useErrorDialogs: true,
-//        stickyAuth: true,
-//      );
-//    } on PlatformException catch (e) {
-//      print(e);
-//    }
+//  Future<void> _authorizeNow() async {
+//    bool isAuthorized = false;
+////    try {
+////      isAuthorized = await _localAuthentication.authenticateWithBiometrics(
+////        localizedReason: "Please authenticate to complete your transaction",
+////        useErrorDialogs: true,
+////        stickyAuth: true,
+////      );
+////    } on PlatformException catch (e) {
+////      print(e);
+////    }
+////
+////    if (!mounted) return;
 //
-//    if (!mounted) return;
-
-    setState(() {
-      if (isAuthorized) {
-        _authorizedOrNot = "Authorized";
-      } else {
-        _authorizedOrNot = "Not Authorized";
-      }
-    });
-  }
+////    setState(() {
+////      if (isAuthorized) {
+////        _authorizedOrNot = "Authorized";
+////      } else {
+////        _authorizedOrNot = "Not Authorized";
+////      }
+////    });
+//  }
 
   @override
   Widget build(BuildContext context) {
@@ -178,23 +188,24 @@ class _SignInScreenState extends State<SignInScreen> {
                                   children: <Widget>[
                                     TextField(
                                       keyboardType: TextInputType.emailAddress,
+                                      style: TextStyle(color: Colors.white),
                                       onChanged: (value) {
                                         email = value;
                                       },
                                       decoration: kTextFieldDecoration.copyWith(
-                                        hintText: 'Enter Your Email',
+                                        hintText: 'Email',
                                       ),
                                     ),
                                     SizedBox(
                                       height: 16,
                                     ),
-                                    TextField(
+                                    InputField(
                                       obscureText: true,
                                       onChanged: (value) {
                                         password = value;
                                       },
                                       decoration: kTextFieldDecoration.copyWith(
-                                        hintText: 'Enter Your Password',
+                                        hintText: 'Password',
                                       ),
                                     ),
                                     SizedBox(
@@ -205,10 +216,15 @@ class _SignInScreenState extends State<SignInScreen> {
                                         setState(() {
                                           _loading = true;
                                         });
-                                        final user = await _auth
-                                            .signInWithEmailAndPassword(
-                                                email: email.trim(),
-                                                password: password);
+//                                        final user = await _auth
+//                                            .signInWithEmailAndPassword(
+//                                                email: email.trim(),
+//                                                password: password);
+//                                        user = await _authService.emailSignIn(
+//                                            email.trim(), password);
+                                        user = await _authService.emailSignIn(
+                                            'testemail6@email.com', '123456');
+                                        print(user.uid);
                                         if (user != null) {
                                           Navigator.push(
                                               context,
