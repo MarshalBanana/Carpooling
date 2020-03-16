@@ -18,13 +18,16 @@ class _TestUserDataScreenState extends State<TestUserDataScreen> {
     super.initState();
     _authService = AuthService();
   }
-
-  @override
-  Widget build(BuildContext context) {
-    return StreamBuilder<Widget>(
-      stream: _authService.getUserDataStream(),
-    );
-  }
+@override
+Widget build(BuildContext context) {
+  return Container(child:Text("Tobe be implemented"));
+}
+  // @override
+  // Widget build(BuildContext context) {
+  //   return StreamBuilder<Widget>(
+  //     stream: _authService.getUserDataStream(),
+  //   );
+  // }
 
   Future<Widget> getUserList() async {
     Stream<DocumentSnapshot> docStream = await _authService.getUserDataStream();

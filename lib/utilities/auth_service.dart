@@ -3,9 +3,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 //import 'package:google_sign_in/google_sign_in.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:rxdart/rxdart.dart';
+import 'utilities.dart';
+
 
 class AuthService {
-//  final GoogleSignIn _googleSignIn = GoogleSignIn();
+
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final Firestore _db = Firestore.instance;
 
@@ -15,16 +17,6 @@ class AuthService {
   PublishSubject loading = PublishSubject();
 
   String _id;
-//  static final MyClass _singleton = new MyClass._internal();
-//
-//  factory MyClass() {
-//    return _singleton;
-//  }
-//
-//  MyClass._internal() {
-//    ... // initialization logic here
-//  }
-  ///singleton variable
   static final AuthService _singleAuth = AuthService._internal();
 
   ///singleton initialization
@@ -116,7 +108,7 @@ class AuthService {
   getUserData() async {
     String id = fUser.uid;
     print(id);
-//    print('????????? id: ' + _id);
+
     Stream<DocumentSnapshot> docStream = _db
         .collection('users')
         .document(id)
@@ -134,50 +126,8 @@ class AuthService {
     String id = fUser.uid;
     print(id);
 
-    return ItemBox _db
-        .collection('users')
-        .document(id)
-        .snapshots(includeMetadataChanges: false);
+    return _db.collection('users').document(id).snapshots(includeMetadataChanges: false); 
   }
-
-//    _db.collection('users').getDocuments().then((QuerySnapshot snapshot) {
-//      snapshot.documents.singleWhere(test)forEach((f) => print('${f.data}'));
-//    });
-
-//  Future<FirebaseUser> googleSignIn() async {
-//    try {
-//      loading.add(true);
-//      GoogleSignInAccount googleSignInAccount = await _googleSignIn.signIn();
-//      GoogleSignInAuthentication googleAuth =
-//          await googleSignInAccount.authentication;
-//
-//      final AuthCredential credential = GoogleAuthProvider.getCredential(
-//        accessToken: googleAuth.accessToken,
-//        idToken: googleAuth.idToken,
-//      );
-//
-//      FirebaseUser user =
-//          (await _auth.signInWithCredential(credential)) as FirebaseUser;
-//      updateUserData(user);
-//      print("user name: ${user.displayName}");
-//
-//      loading.add(false);
-//      return user;
-//    } catch (error) {
-//      return error;
-//    }
-//  }
-
-//  void updateUserData(FirebaseUser user) async {
-//    DocumentReference ref = _db.collection('users').document(user.uid);
-//
-//    return ref.setData({
-//      'uid': user.uid,
-//      'email': user.email,
-//      'displayName': user.displayName,
-//      'lastSeen': DateTime.now()
-//    }, merge: true);
-//  }
 
   Future<String> signOut() async {
     try {

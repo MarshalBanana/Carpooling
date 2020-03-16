@@ -1,5 +1,9 @@
+import 'package:carpooling/screens/ride_information_screen.dart';
+import 'package:carpooling/state/app_states.dart';
 import 'package:flutter/material.dart';
 import 'package:carpooling/utilities/constants.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -7,8 +11,11 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final Firestore _db = Firestore.instance;
+
   @override
   Widget build(BuildContext context) {
+    final appState = Provider.of<AppState>(context);
     return Scaffold(
       appBar: PreferredSize(
           child: Container(
@@ -16,6 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: ClipPath(
                 clipper: AppBarClipper(),
                 child: AppBar(
+                  automaticallyImplyLeading: true,
                   backgroundColor: kappBarColor,
                   title: Padding(
                     padding: EdgeInsets.only(top: 20, left: 20),
@@ -49,25 +57,60 @@ class _HomeScreenState extends State<HomeScreen> {
                     fontSize: 20,
                     fontWeight: FontWeight.w600),
               ),
-              Row(
-                children: <Widget>[
-                  Material(
-                    borderRadius: BorderRadius.circular(10),
-                    color: kboxColor,
-                    child: Container(
-                      height: MediaQuery.of(context).size.height / 5.5,
-                      child: Column(
-                        children: <Widget>[
-                          Text('sadfasgasga'),
-                          Text('sadfasgasga'),
-                          Text('sadfasgasga'),
-                          Text('sadfasgasga'),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+              StreamBuilder(
+                  stream: _db.collection("user_auth").snapshots(),
+                  builder: (context, snapshot) {
+                    switch (snapshot.connectionState) {
+                      case ConnectionState.none:
+                        return Text(
+                            "It appears something is wrong with the network");
+                      case ConnectionState.waiting:
+                        return Center(child: CircularProgressIndicator());
+                      case ConnectionState.active:
+                        return Expanded(
+                          child: new ListView.builder(
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              itemCount: snapshot.data.documents.length,
+                              itemBuilder: (context, index) {
+                                DocumentSnapshot riderInfo =
+                                    snapshot.data.documents[index];
+                                return Material(
+                                    child: GestureDetector(
+                                      onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => RideInfoScreen(
+                                                appState: appState,
+                                              )),
+                                    );
+                                  },
+                                                                          child: Container(
+                                  decoration: BoxDecoration(
+                                        shape: BoxShape.rectangle,
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(8.0)),
+                                        color: kboxColor),
+                                  margin: EdgeInsets.all(4),
+                                  height: 16,
+                                  child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: <Widget>[
+                                        Text(riderInfo["email"]),
+                                        Text(riderInfo["mobile"])
+                                        //Text(ds["user_id"].toString())
+                                      ],
+                                  ),
+                                ),
+                                    ));
+                              }),
+                        );
+                      case ConnectionState.done:
+                        return Text("sd");
+                    }
+                  }),
               Text(
                 'People near You',
                 style: TextStyle(
@@ -75,25 +118,54 @@ class _HomeScreenState extends State<HomeScreen> {
                     fontSize: 20,
                     fontWeight: FontWeight.w600),
               ),
-              Row(
-                children: <Widget>[
-                  Material(
-                    borderRadius: BorderRadius.circular(10),
-                    color: kboxColor,
-                    child: Container(
-                      height: MediaQuery.of(context).size.height / 5.5,
-                      child: Column(
-                        children: <Widget>[
-                          Text('sadfasgasga'),
-                          Text('sadfasgasga'),
-                          Text('sadfasgasga'),
-                          Text('sadfasgasga'),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+              StreamBuilder(
+                  stream: _db.collection("user_auth").snapshots(),
+                  builder: (context, snapshot) {
+                    switch (snapshot.connectionState) {
+                      case ConnectionState.none:
+                        return Text(
+                            "It appears something is wrong with the network");
+                      case ConnectionState.waiting:
+                        return Center(child: CircularProgressIndicator());
+                      case ConnectionState.active:
+                        return Expanded(
+                          child: new ListView.builder(
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              itemCount: snapshot.data.documents.length,
+                              itemBuilder: (context, index) {
+                                DocumentSnapshot riderInfo =
+                                    snapshot.data.documents[index];
+                                print("A" * 100);
+
+                                return Material(                             
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        shape: BoxShape.rectangle,
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(8.0)),
+                                        color: kboxColor),
+                                    margin: EdgeInsets.all(4),
+                                    height: 16,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: <Widget>[
+                                        Text(riderInfo["email"]),
+                                        Text(riderInfo["mobile"]),
+                                        // getUserInfo(riderInfo["user_id"]
+                                        //     .toString()
+                                        //     .substring(7))
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              }),
+                        );
+                      case ConnectionState.done:
+                        return Text("sd");
+                    }
+                  }),
               Container(
                 child: CustomButton(
                   buttonColor: kforwardButtonColor,
@@ -144,6 +216,36 @@ class AppBarClipper extends CustomClipper<Path> {
     // TODO: implement shouldReclip
     return true;
   }
+}
+
+//age can_drive first name last name is_male rating
+getUserInfo(String userID) {
+  // final Firestore _db = Firestore.instance;
+  // //Stream document = _db .collection("user").snapshots();
+  // Stream<DocumentSnapshot>  userInfo = _db.collection("users").document(userID).snapshots().;
+  // //var document =  Firestore.instance.collection('users').document(userID).snapshots();
+
+  // print("*"*80);
+  // print(userInfo['age']);
+  // print(document["firstname"]);
+  // print(document["rating"]);
+  // print("*"*80);
+  // //return {'age': document["age"],'can_drive' : document["can_drive"]};
+  // return "dsadasa";
+  StreamBuilder(
+      stream: Firestore.instance.collection("users").snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return Text(
+            'No Data...',
+          );
+        } else {
+          DocumentSnapshot items = snapshot.data.document(userID);
+          print("B" * 100);
+          print(items["age"]);
+          return Text(items["age"]);
+        }
+      });
 }
 
 class CustomButton extends StatelessWidget {

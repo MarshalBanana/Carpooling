@@ -160,6 +160,25 @@ class AppState with ChangeNotifier {
     notifyListeners();
   }
 
+    // This is for displaying the ride information on the map of the ride info screen ie. begin, end, and route between them
+  void onCreatedRideInfo(LatLng initial,LatLng destination) async {
+    _initialPosition = initial;
+    _lastPosition = destination;
+    _addMarker(initialPosition, "initial");
+    _addMarker(initialPosition, "initial");
+    print("*"*80);
+    print("*"*80);
+    print("*"*80);
+    print("*"*80);
+    _addMarker(lastPosition, "destination");
+    String route = await _googleMapsServices.getRouteCoordinates(
+          initialPosition, destination);
+      //print("$lat,$lng");
+      //createRoute(route);
+    notifyListeners();
+  }
+
+
 
   //  LOADING INITIAL POSITION
   void _loadingInitialPosition()async{
@@ -203,7 +222,4 @@ class AppState with ChangeNotifier {
     destinationController.text = prediction.description;
     notifyListeners();
   }
-
-
-
 }
