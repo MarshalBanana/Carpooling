@@ -37,6 +37,6 @@ class LoadingScreen extends StatelessWidget {
                     ),
                   ],
                 ))
-            : OrganizingScreen(title: 'Flutter Demo Home Page'));
+            : OrganizingScreen(title: 'CarPooling'));
   }
 }

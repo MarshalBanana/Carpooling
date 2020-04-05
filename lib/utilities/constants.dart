@@ -15,3 +15,5 @@ const kmediumTitleTextStyle = TextStyle(
     fontFamily: 'Montserrat', fontSize: 20, fontWeight: FontWeight.w600);
 const ktitleTextStyle =
     TextStyle(fontFamily: 'Montserrat', fontSize: 30, color: Colors.white);
+const kTimePickTextStyle = TextStyle(
+    fontFamily: 'Montserrat', fontSize: 15, fontWeight: FontWeight.w600);

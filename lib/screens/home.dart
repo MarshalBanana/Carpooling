@@ -1,8 +1,10 @@
+import 'package:carpooling/screens/map_screen.dart';
 import 'package:carpooling/screens/ride_information_screen.dart';
 import 'package:carpooling/state/app_states.dart';
 import 'package:flutter/material.dart';
 import 'package:carpooling/utilities/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -12,7 +14,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final Firestore _db = Firestore.instance;
-
+  double allowedDistance = 12;
   @override
   Widget build(BuildContext context) {
     final appState = Provider.of<AppState>(context);
@@ -77,68 +79,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                     snapshot.data.documents[index];
                                 return Material(
                                     child: GestureDetector(
-                                      onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => RideInfoScreen(
-                                                appState: appState,
-                                              )),
-                                    );
+                                  onTap: () {
+                                    // Navigator.push(
+                                    //   context,
+                                    //   MaterialPageRoute(
+                                    //       builder: (context) => RideInfoScreen(
+                                    //             appState: appState,
+                                    //           )),
+                                    // );
                                   },
-                                                                          child: Container(
-                                  decoration: BoxDecoration(
-                                        shape: BoxShape.rectangle,
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(8.0)),
-                                        color: kboxColor),
-                                  margin: EdgeInsets.all(4),
-                                  height: 16,
-                                  child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: <Widget>[
-                                        Text(riderInfo["email"]),
-                                        Text(riderInfo["mobile"])
-                                        //Text(ds["user_id"].toString())
-                                      ],
-                                  ),
-                                ),
-                                    ));
-                              }),
-                        );
-                      case ConnectionState.done:
-                        return Text("sd");
-                    }
-                  }),
-              Text(
-                'People near You',
-                style: TextStyle(
-                    fontFamily: 'Montserrat',
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600),
-              ),
-              StreamBuilder(
-                  stream: _db.collection("user_auth").snapshots(),
-                  builder: (context, snapshot) {
-                    switch (snapshot.connectionState) {
-                      case ConnectionState.none:
-                        return Text(
-                            "It appears something is wrong with the network");
-                      case ConnectionState.waiting:
-                        return Center(child: CircularProgressIndicator());
-                      case ConnectionState.active:
-                        return Expanded(
-                          child: new ListView.builder(
-                              shrinkWrap: true,
-                              scrollDirection: Axis.horizontal,
-                              itemCount: snapshot.data.documents.length,
-                              itemBuilder: (context, index) {
-                                DocumentSnapshot riderInfo =
-                                    snapshot.data.documents[index];
-                                print("A" * 100);
-
-                                return Material(                             
                                   child: Container(
                                     decoration: BoxDecoration(
                                         shape: BoxShape.rectangle,
@@ -152,24 +101,140 @@ class _HomeScreenState extends State<HomeScreen> {
                                           MainAxisAlignment.spaceEvenly,
                                       children: <Widget>[
                                         Text(riderInfo["email"]),
-                                        Text(riderInfo["mobile"]),
-                                        // getUserInfo(riderInfo["user_id"]
-                                        //     .toString()
-                                        //     .substring(7))
+                                        Text(riderInfo["mobile"])
+                                        //Text(ds["user_id"].toString())
                                       ],
                                     ),
                                   ),
-                                );
+                                ));
                               }),
                         );
                       case ConnectionState.done:
                         return Text("sd");
                     }
+                    return Text("stream Complete");
+                  }),
+              Text(
+                'People near You',
+                style: TextStyle(
+                    fontFamily: 'Montserrat',
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600),
+              ),
+              StreamBuilder(
+                  stream: _db.collection("scheduled_rides").snapshots(),
+                  builder: (context, snapshot) {
+                    switch (snapshot.connectionState) {
+                      case ConnectionState.none:
+                        return Text(
+                            "It appears something is wrong with the network");
+                      case ConnectionState.waiting:
+                        return Center(child: CircularProgressIndicator());
+                      case ConnectionState.active:
+                        return Expanded(
+                          child: new ListView.builder(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            itemCount: snapshot.data.documents.length,
+                            itemBuilder: (context, index) {
+                              if (snapshot.hasData) {
+                                DocumentSnapshot tripInfo =
+                                    snapshot.data.documents[index];
+                                // print("length" +
+                                //     snapshot.data.documents.length.toString());
+                                // if (tripInfo["driver"] == "Osama") {
+                                //   print(true);
+                                // }
+                                // print(tripInfo.data);
+                                // print(tripInfo.documentID);
+                                // print(tripInfo["driver"]);
+
+                                GeoPoint pickUpGeo = tripInfo["pick_up"];
+                                GeoPoint destinationGeo =
+                                    tripInfo["destination"];
+                                LatLng pickup = new LatLng(
+                                    pickUpGeo.latitude, pickUpGeo.longitude);
+                                LatLng destination = new LatLng(
+                                    destinationGeo.latitude,
+                                    destinationGeo.longitude);
+
+                                // print("A" * 100);
+                                // if(distance(, point2))
+                                // var current = appState.getCurrentLocation();
+                                // print(current.toString());
+                                // if(distance(current, tripInfo[] || )){
+                                if (!(tripInfo["driver"] == "Khaled")) {
+                                  // TODO make actual conditioning, at the moment it stops building if it reaches a false condition
+                                  print("entered");
+                                  return Material(
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  RideInfoScreen(
+                                                    appState: appState,
+                                                    destinationLocation:
+                                                        destination,
+                                                    pickUpLocation: pickup,
+                                                    driverName:
+                                                        tripInfo["driver"],
+                                                    rating: 5.toString(),
+                                                  )),
+                                        );
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            shape: BoxShape.rectangle,
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(8.0)),
+                                            color: kboxColor),
+                                        margin: EdgeInsets.all(4),
+                                        height: 16,
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                          children: <Widget>[
+                                            Text("Driver: " +
+                                                tripInfo["driver"]),
+                                            Text("Pick up: " +
+                                                tripInfo["pick_up_name"]),
+                                            Text("Destination: " +
+                                                tripInfo["destination_name"]),
+                                            // getUserInfo(riderInfo["user_id"]
+                                            //     .toString()
+                                            //     .substring(7))
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                } else {
+                                  Container(child: Text("dsasd"));
+                                }
+                              } else {
+                                return Container(
+                                  child: Text("There is no data"),
+                                );
+                              }
+                            },
+                          ),
+                        );
+                      case ConnectionState.done:
+                        return Text("sd");
+                    }
+                    return Container();
                   }),
               Container(
                 child: CustomButton(
                   buttonColor: kforwardButtonColor,
-                  onPress: () {},
+                  onPress: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => MapScreen(appState: appState)),
+                    );
+                  },
                   text: Text(
                     'Schedule a Ride',
                     style: TextStyle(

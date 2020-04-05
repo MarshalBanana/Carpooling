@@ -154,10 +154,10 @@ class _MapState extends State<Map> {
                 icon: Icon(Icons.settings),
                 title: Text('Settings'),
                 activeColor: Colors.blue),
-            BottomNavyBarItem(
-                icon: Icon(Icons.add_location),
-                title: Text('Ride Info Test'),
-                activeColor: Colors.pink),
+            // BottomNavyBarItem(
+            //     icon: Icon(Icons.add_location),
+            //     title: Text('Ride Info Test'),
+            //     activeColor: Colors.pink),
           ],
         ),
         body: PageViewWidget(
@@ -200,7 +200,7 @@ class PageViewWidget extends StatelessWidget {
         TestScreen(),
         SignUpScreen(), // <- this one adds a test user to the database on button click
         SignInScreen(),
-        RideInfoScreen(appState:appState) // making a ride information screen 
+        //RideInfoScreen(appState:appState) // making a ride information screen 
 //      DemoRegisterScreen(),
       ],
     );

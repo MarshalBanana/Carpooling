@@ -25,8 +25,7 @@ class AppState with ChangeNotifier {
   Set<Marker> get markers => _markers;
   Set<Polyline> get polylines => _polyLines;
   GoogleMapsPlaces get places => _places;
-
-  final Set<Marker> _markers = {};
+   Set<Marker> _markers = {};
   final Set<Polyline> _polyLines = {};
 
   AppState() {
@@ -46,6 +45,11 @@ class AppState with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<LatLng> getCurrentLocation() async{
+    Position p = await Geolocator().getCurrentPosition(desiredAccuracy:LocationAccuracy.high);
+    return  LatLng(p.latitude,p.longitude);
+  }
+
 // TO CREATE AND DRAW THE ROUTE FROM ONE POINT TO THE OTHER
   void createRoute(String encodedPoly) {
     _polyLines.add(Polyline(
@@ -58,7 +62,7 @@ class AppState with ChangeNotifier {
   // TO ADD MARKERS WHEN A LOCATION IS SET
   void _addMarker(LatLng location, String address) {
     _markers.add(Marker(
-        markerId: MarkerId(_lastPosition.toString()),
+        markerId: MarkerId(location.toString()),
         position: location,
         infoWindow: InfoWindow(title: address, snippet: "destination"),
         icon: BitmapDescriptor.defaultMarker));
@@ -87,7 +91,6 @@ class AppState with ChangeNotifier {
     do {
       var shift = 0;
       int result = 0;
-
       // for decoding value of one attribute
       do {
         c = list[index] - 63;
@@ -128,6 +131,7 @@ class AppState with ChangeNotifier {
   void sendRequest(String userDistenation) async {
     List<Placemark> placemark =
         await Geolocator().placemarkFromAddress(userDistenation);
+        print(placemark.toString());
     // double latitude = placemark[0].position.latitude;
     // double longitude = placemark[0].position.longitude;
     // LatLng destination = LatLng(latitude, longitude);
@@ -135,16 +139,16 @@ class AppState with ChangeNotifier {
       // get detail (lat/lng)
       PlacesDetailsResponse detail =
           await _places.getDetailsByPlaceId(prediction.placeId);
+          print(detail.toString());
       final lat = detail.result.geometry.location.lat;
       final lng = detail.result.geometry.location.lng;
-
       LatLng destination = LatLng(lat, lng);
       _addMarker(destination, userDistenation);
-      String route = await _googleMapsServices.getRouteCoordinates(
-          initialPosition, destination);
-      print("$lat,$lng");
-      createRoute(route);
-
+      //_addMarker(destination, userDistenation);
+      // String route = await _googleMapsServices.getRouteCoordinates(
+      //     initialPosition, destination);
+      // print("$lat,$lng");
+      // createRoute(route);
     notifyListeners();
   }
 
@@ -162,17 +166,16 @@ class AppState with ChangeNotifier {
 
     // This is for displaying the ride information on the map of the ride info screen ie. begin, end, and route between them
   void onCreatedRideInfo(LatLng initial,LatLng destination) async {
-    _initialPosition = initial;
-    _lastPosition = destination;
-    _addMarker(initialPosition, "initial");
-    _addMarker(initialPosition, "initial");
-    print("*"*80);
-    print("*"*80);
-    print("*"*80);
-    print("*"*80);
-    _addMarker(lastPosition, "destination");
-    String route = await _googleMapsServices.getRouteCoordinates(
-          initialPosition, destination);
+    // markers.remove(markers.last);
+    _markers = {};
+     _addMarker(initial, "initial");
+     _addMarker(destination, "destination");
+    // print("*"*80);
+    // print("*"*80);
+    // print("*"*80);
+    // print("*"*80);
+    // String route = await _googleMapsServices.getRouteCoordinates(
+    //       initialPosition, destination);
       //print("$lat,$lng");
       //createRoute(route);
     notifyListeners();
