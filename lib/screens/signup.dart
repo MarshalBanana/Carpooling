@@ -252,10 +252,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
 //                                            _phoneNo,
 //                                            _gender);
                                         user = await _authService.createNewUser(
-                                          'testemail6@email.com',
+                                          'ahmedemail@email.com',
                                           '123456',
-                                          'testfname6',
-                                          'testfname6',
+                                          'ahmed',
+                                          'robah',
                                           25,
                                           '5554567891',
                                           Gender.Male,

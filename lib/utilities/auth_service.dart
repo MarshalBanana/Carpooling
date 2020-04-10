@@ -5,9 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:rxdart/rxdart.dart';
 import 'utilities.dart';
 
-
 class AuthService {
-
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final Firestore _db = Firestore.instance;
 
@@ -52,25 +50,47 @@ class AuthService {
         email: email, password: password);
 
     fUser = await _auth.currentUser();
+
     user = Observable(_auth.onAuthStateChanged);
     return fUser;
   }
 
-  Future<FirebaseUser> emailSignUp(String email, String password) async {
+  Future<FirebaseUser> emailSignUp(
+      String email, String password, String phoneNumber) async {
     try {
       AuthResult result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
+
       fUser = await _auth.currentUser();
       _id = fUser.uid;
-      print(_id);
-      user = Observable(_auth.onAuthStateChanged);
 
-      return fUser;
+      print("userid: " + _id);
+      user = Observable(_auth.onAuthStateChanged);
     } catch (e) {
       print('below error from: authService + emailsignup()');
       print(e);
+
       return null;
     }
+
+    bool isPhoneVerified = false;
+
+    /** verifying user phone*/
+    await _auth.verifyPhoneNumber(
+        phoneNumber: phoneNumber,
+        timeout: Duration(minutes: 2),
+        verificationCompleted: (AuthCredential credential) {
+          /** linking user with his phone*/
+          fUser.linkWithCredential(credential);
+          isPhoneVerified = true;
+        },
+        verificationFailed: null,
+        codeAutoRetrievalTimeout: (String verificationId) {},
+        codeSent: null);
+
+    /** check if email and phone are correct*/
+    user = Observable(_auth.onAuthStateChanged);
+    return ((fUser == null) || !isPhoneVerified) ? null : fUser;
   }
 
   Future<FirebaseUser> createNewUser(
@@ -82,7 +102,7 @@ class AuthService {
     String phoneNumber,
     Gender gender,
   ) async {
-    FirebaseUser user = await emailSignUp(email, password);
+    FirebaseUser user = await emailSignUp(email, password, phoneNumber);
 
     bool isMale = gender == Gender.Male ? true : false;
     await createUserData(firstName, lastName, age, isMale, phoneNumber, user);
@@ -126,7 +146,10 @@ class AuthService {
     String id = fUser.uid;
     print(id);
 
-    return _db.collection('users').document(id).snapshots(includeMetadataChanges: false); 
+    return _db
+        .collection('users')
+        .document(id)
+        .snapshots(includeMetadataChanges: false);
   }
 
   Future<String> signOut() async {
