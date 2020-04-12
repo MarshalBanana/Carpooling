@@ -13,6 +13,7 @@ class AuthService {
 
   Observable<FirebaseUser> user; // firebase user
   FirebaseUser fUser;
+  
   Observable<Map<String, dynamic>> profile; // custom user data in Firestore
   PublishSubject loading = PublishSubject();
 
@@ -126,7 +127,7 @@ class AuthService {
     String id = fUser.uid;
     print(id);
 
-    return _db.collection('users').document(id).snapshots(includeMetadataChanges: false); 
+    return _db.collection('users').document(id).snapshots(includeMetadataChanges: false).asBroadcastStream(); 
   }
 
   Future<String> signOut() async {

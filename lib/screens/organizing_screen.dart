@@ -1,3 +1,4 @@
+import 'package:carpooling/screens/past_rides_screen.dart';
 import 'package:carpooling/screens/ride_information_screen.dart';
 import 'package:carpooling/screens/signin.dart';
 import 'package:carpooling/screens/signup.dart';
@@ -154,10 +155,10 @@ class _MapState extends State<Map> {
                 icon: Icon(Icons.settings),
                 title: Text('Settings'),
                 activeColor: Colors.blue),
-            // BottomNavyBarItem(
-            //     icon: Icon(Icons.add_location),
-            //     title: Text('Ride Info Test'),
-            //     activeColor: Colors.pink),
+            BottomNavyBarItem(
+                icon: Icon(Icons.add_location),
+                title: Text('Past Rides Test'),
+                activeColor: Colors.pink),
           ],
         ),
         body: PageViewWidget(
@@ -200,6 +201,7 @@ class PageViewWidget extends StatelessWidget {
         TestScreen(),
         SignUpScreen(), // <- this one adds a test user to the database on button click
         SignInScreen(),
+        PastRideScreen()
         //RideInfoScreen(appState:appState) // making a ride information screen 
 //      DemoRegisterScreen(),
       ],

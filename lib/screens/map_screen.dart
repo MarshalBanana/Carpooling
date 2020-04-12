@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:carpooling/state/app_states.dart';
 import 'package:carpooling/utilities/date_time.dart';
+import 'package:carpooling/requests/database_requests.dart';
 
 class MapScreen extends StatefulWidget {
 
@@ -136,11 +137,15 @@ class _MapScreenState extends State<MapScreen> {
           ),
           Visibility(
               visible: showScheduler,
-              child: TimeBookingManager())
+              child: TimeBookingManager(function: getUserInfo))
         ],
       ),
     );
   }
+}
+
+void makeTrip(){
+
 }
 
 

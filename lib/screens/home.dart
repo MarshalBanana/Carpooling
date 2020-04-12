@@ -232,7 +232,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   onPress: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => MapScreen(appState: appState)),
+                      MaterialPageRoute(
+                          builder: (context) => MapScreen(appState: appState)),
                     );
                   },
                   text: Text(

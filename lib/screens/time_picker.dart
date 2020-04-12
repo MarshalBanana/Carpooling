@@ -1,21 +1,24 @@
+import 'package:carpooling/requests/database_requests.dart';
 import 'package:carpooling/utilities/constants.dart';
 import 'package:carpooling/utilities/utilities.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:intl/intl.dart';
 
 class TimeBookingManager extends StatefulWidget {
   TimeBookingManager(
       {Key key,
       DateTime toBeDisplayed,
-      bool repeatDaily,
-      bool repeatWeekly,
-      bool repeatMonthly,
+      // bool repeatDaily,
+      // bool repeatWeekly,
+      // bool repeatMonthly,
       Function function})
       : super(key: key);
 
   DateTime toBeDisplayed = DateTime.now();
+  //String timeInFormat = DateTime.now().toString(); //this is for showing the time in correct format
   bool repeatDaily = false;
   bool repeatWeekly = false;
   bool repeatMonthly = false;
@@ -31,7 +34,7 @@ class _TimeBookingManagerState extends State<TimeBookingManager> {
     return DraggableScrollableSheet(
       initialChildSize: 0.1,
       minChildSize: 0.1,
-      maxChildSize: 0.4,
+      maxChildSize: 0.5,
       expand: true,
       builder: (BuildContext context, ScrollController scrollController) {
         return SingleChildScrollView(
@@ -81,7 +84,7 @@ class _TimeBookingManagerState extends State<TimeBookingManager> {
                     width: 5,
                     textColor: Colors.black),
                 Text(
-                  widget.toBeDisplayed.toString(),
+                  DateFormat.yMEd().add_jms().format(widget.toBeDisplayed).toString(),
                   style: kTimePickTextStyle,
                   textAlign: TextAlign.center,
                 ),
@@ -140,7 +143,9 @@ class _TimeBookingManagerState extends State<TimeBookingManager> {
                 ),
                 Divider(),
                 CustomButton(
-                    onPress: widget.function,
+                    onPress: (){
+                        getUserInfo();
+                      },
                     text: Text("Book Your Ride"),
                     height: 15,
                     buttonColor: kforwardButtonColor,

@@ -181,7 +181,6 @@ class _RideInfoScreenState extends State<RideInfoScreen> {
                       }
                     },
                   ),
-
                   // Text(distance(LatLng(24.621687, 46.707276),
                   //         LatLng(24.736591, 46.702029), "K"))
                 ],
