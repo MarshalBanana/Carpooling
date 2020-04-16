@@ -1,10 +1,11 @@
 import 'package:carpooling/screens/time_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:carpooling/state/app_states.dart';
 import 'package:carpooling/utilities/date_time.dart';
-import 'package:carpooling/requests/database_requests.dart';
+import 'package:carpooling/utilities/auth_service.dart';
 
 class MapScreen extends StatefulWidget {
 
@@ -19,15 +20,36 @@ class MapScreen extends StatefulWidget {
 }
 
 class _MapScreenState extends State<MapScreen> {
+
+
+
+  FirebaseUser currentUser;
+  AuthService _authService = AuthService();
   var showScheduler = false;
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _authService = AuthService();
+  }
+  
   @override
   Widget build(BuildContext context) {
     print("Show Scheduler: "+showScheduler.toString());
     //final customPicker = new CustomPicker();
     return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(38.0), 
+              child: AppBar(
+          automaticallyImplyLeading: true,
+          backgroundColor: Colors.indigo[900],
+        ),
+      ),
       body: Stack(
         children: <Widget>[
-          GoogleMap(
+          new GoogleMap(
             initialCameraPosition:
                 CameraPosition(target: widget.appState.initialPosition, zoom: 10),
             onMapCreated: widget.appState.onCreated,
@@ -69,7 +91,7 @@ class _MapScreenState extends State<MapScreen> {
                       color: Colors.black,
                     ),
                   ),
-                  hintText: "pick up",
+                  hintText: "From",
                   border: InputBorder.none,
                   contentPadding: EdgeInsets.only(left: 15.0, top: 16.0),
                 ),
@@ -128,7 +150,7 @@ class _MapScreenState extends State<MapScreen> {
                       color: Colors.black,
                     ),
                   ),
-                  hintText: "destination",
+                  hintText: "To",
                   border: InputBorder.none,
                   contentPadding: EdgeInsets.only(left: 15.0, top: 16.0),
                 ),
@@ -137,7 +159,8 @@ class _MapScreenState extends State<MapScreen> {
           ),
           Visibility(
               visible: showScheduler,
-              child: TimeBookingManager(function: getUserInfo))
+              child: TimeBookingManager(appState: widget.appState,
+              ))
         ],
       ),
     );

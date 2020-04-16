@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:carpooling/screens/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -60,8 +58,9 @@ class PastRideScreen extends StatelessWidget {
                         itemBuilder: (context, index) {
                           DocumentSnapshot tripInfo =
                               snapshot.data.documents[index];
-                              String driverName = getInfo(tripInfo["driver_id"], "firstname");
-                          print("trip info" + tripInfo.toString());
+                          // String driverName =
+                          //     getInfo(tripInfo["driver_id"], "firstname");
+                          //print("trip info" + tripInfo.toString());
                           return GestureDetector(
                               onTap: () {},
                               child: Container(
@@ -74,9 +73,30 @@ class PastRideScreen extends StatelessWidget {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceEvenly,
                                   children: <Widget>[
-                                    Text(driverName,
-                                        style:
-                                            kTimePickTextStyle), // we use it to get the driver info later but the method isnt here yet
+                                    // Text(driverName,
+                                    //     style:
+                                    //         kTimePickTextStyle), // we use it to get the driver info later but the method isnt here yet
+                                    FutureBuilder(
+                                        future: getInfo(tripInfo["driver_id"], "firstname"),
+                                        builder: (context, snapshot) {
+                                          switch (snapshot.connectionState) {
+                                            case ConnectionState.none:
+                                              return Text(
+                                                  "It appears something is wrong with the network");
+                                            case ConnectionState.waiting:
+                                              return Text("waiting");
+                                            case ConnectionState.active:
+                                              return Text(
+                                                "Driver Name: " + snapshot.data,
+                                                style: kTimePickTextStyle,
+                                              );
+                                            case ConnectionState.done:
+                                              print(snapshot.data);
+                                              return Text(
+                                                  "Driver Does not Exist");
+                                          }
+                                          return Text("data");
+                                        }),
                                     Text(
                                         "Pick Up: " +
                                             tripInfo["pick_up_name"].toString(),
@@ -119,18 +139,24 @@ class PastRideScreen extends StatelessWidget {
   }
 }
 
- getInfo(DocumentReference d, String field) async{
+ getInfo(DocumentReference d, String field) async {
   final Firestore _db = Firestore.instance;
   String toBeReturned;
   String path = d.path;
-  _db.document(path).get().then((doc) async {
+  print(d.path);
+  _db.document(path).get().then((doc) {
     if (doc.exists) {
       print("Document data:" + doc.data[field].toString());
-      toBeReturned = doc.data[field].toString();
+      toBeReturned = doc.data[field];
+      print("should return now");
+      return toBeReturned.toString();
     } else {
-      toBeReturned = "Document does not exist";
+      //toBeReturned = "Document does not exist";
+      print("hasent returned1");
     }
+    print("hasent returned2");
     return toBeReturned.toString();
   });
-  return toBeReturned.toString();
+  print("hasent returned3");
+  return toBeReturned;
 }

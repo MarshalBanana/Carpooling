@@ -9,7 +9,7 @@ Stream currentUser = a.getUserDataStream();
 Firestore get db => _db;
 
  getUserInfo() { 
-print("get User Info");
+  print("get User Info");
   String name ="";
   print("name: " + name);
   String phoneNum;

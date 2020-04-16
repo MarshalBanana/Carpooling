@@ -1,3 +1,4 @@
+import 'package:carpooling/screens/ride_information_screen.dart';
 import 'package:carpooling/screens/signup.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 //import 'package:google_sign_in/google_sign_in.dart';
@@ -5,15 +6,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:rxdart/rxdart.dart';
 import 'utilities.dart';
 
-
 class AuthService {
-
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final Firestore _db = Firestore.instance;
 
   Observable<FirebaseUser> user; // firebase user
   FirebaseUser fUser;
-  
+
   Observable<Map<String, dynamic>> profile; // custom user data in Firestore
   PublishSubject loading = PublishSubject();
 
@@ -106,10 +105,9 @@ class AuthService {
     });
   }
 
-  getUserData() async {
+  void getUserData() async {
     String id = fUser.uid;
     print(id);
-
     Stream<DocumentSnapshot> docStream = _db
         .collection('users')
         .document(id)
@@ -123,11 +121,47 @@ class AuthService {
     });
   }
 
+  Map<String, dynamic> getUserDetails() {
+    String id = fUser.uid;
+    print(id);
+    Stream<DocumentSnapshot> docStream = _db
+        .collection('users')
+        .document(id)
+        .snapshots(includeMetadataChanges: false);
+    Map<String, dynamic> userInfo  = Map<String,dynamic>();
+    //new Map<String, dynamic>();
+    print("user info" + userInfo.toString());
+
+    
+
+      print(docStream);
+      docStream.forEach((value) {
+      print("value"+value.data.toString());
+      userInfo.addAll(value.data);
+    });
+    print("user info" + userInfo.toString());
+    return userInfo;
+  }
+
+  // value.data.forEach((String val, dynamic x) {
+  //   if(val.toString() == "lastSeen"){
+  //     x = x.toDate();
+  //   }
+  //   print(val.toString() + ":" + x.toString());
+  //   try{userInfo.putIfAbsent(val.toString(),x.toString());}
+  //   catch(e){
+  //     print(e);
+  //   }
+
   Stream<DocumentSnapshot> getUserDataStream() {
     String id = fUser.uid;
     print(id);
 
-    return _db.collection('users').document(id).snapshots(includeMetadataChanges: false).asBroadcastStream(); 
+    return _db
+        .collection('users')
+        .document(id)
+        .snapshots(includeMetadataChanges: false)
+        .asBroadcastStream();
   }
 
   Future<String> signOut() async {
