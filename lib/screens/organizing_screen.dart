@@ -1,5 +1,6 @@
 import 'package:carpooling/screens/past_rides_screen.dart';
 import 'package:carpooling/screens/ride_information_screen.dart';
+import 'package:carpooling/screens/scheduled_rides_with_driver_screen.dart';
 import 'package:carpooling/screens/signin.dart';
 import 'package:carpooling/screens/signup.dart';
 import 'package:carpooling/screens/test_screen.dart';
@@ -156,8 +157,8 @@ class _MapState extends State<Map> {
                 title: Text('Settings'),
                 activeColor: Colors.blue),
             BottomNavyBarItem(
-                icon: Icon(Icons.add_location),
-                title: Text('Past Rides Test'),
+                icon: Icon(Icons.security),
+                title: Text('Scheduled Rides With a Driver'),
                 activeColor: Colors.pink),
           ],
         ),
@@ -201,8 +202,7 @@ class PageViewWidget extends StatelessWidget {
         TestScreen(),
         SignUpScreen(), // <- this one adds a test user to the database on button click
         SignInScreen(),
-        PastRideScreen()
-        //RideInfoScreen(appState:appState) // making a ride information screen 
+        ScheduledRidesWithDriver()        //RideInfoScreen(appState:appState) // making a ride information screen 
 //      DemoRegisterScreen(),
       ],
     );

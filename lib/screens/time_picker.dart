@@ -14,6 +14,7 @@ class TimeBookingManager extends StatefulWidget {
     Key key,
     DateTime toBeDisplayed,
     @required this.appState,
+    @required this.isDriver,
     // bool repeatDaily,
     // bool repeatWeekly,
     // bool repeatMonthly,
@@ -24,6 +25,7 @@ class TimeBookingManager extends StatefulWidget {
   bool repeatDaily = false;
   bool repeatWeekly = false;
   bool repeatMonthly = false;
+  bool isDriver;
   AuthService _authService = AuthService();
   FirebaseUser currentUser;
   @override
@@ -179,68 +181,118 @@ class _TimeBookingManagerState extends State<TimeBookingManager> {
                         return userInfo;
                       });
                       //.snapshots;//(includeMetadataChanges: false);
-                      if(userInfo['is_driver']){
-                      _db
-                          .collection("scheduled_rides")
-                          .add({
-                            'id': userInfo['id'].toString(),
-                            'firstname': userInfo['firstname'].toString(),
-                            'lastname': userInfo['lastname'].toString(),
-                            'phone_number': userInfo['phone_number'].toString(),
-                            'age': userInfo["age"].toString(),
-                            'is_male': userInfo["is_male"].toString(),
-                            'rating': userInfo["rating"].toString(),
-                            'pick_up': GeoPoint(
-                                widget.appState.initialPosition.latitude,
-                                widget.appState.initialPosition.longitude),
-                            'pick_up_name':
-                                widget.appState.locationController.text,
-                            'destination': GeoPoint(
-                                widget.appState.lastPosition.latitude,
-                                widget.appState.lastPosition.longitude),
-                            'destination_name':
-                                widget.appState.destinationController.text,
-                            'trip_time': widget.toBeDisplayed.toString(),
-                            'driver': userInfo['firstname'].toString() +
-                                " " +
-                                userInfo['lastname'].toString(),
-                            'maxmimum_seats': 4.toString(),
-                            'riders': [
-                              userInfo['id'].toString() +
-                                  ";" +
-                                  userInfo['firstname'] +
-                                  "," +
-                                  userInfo['lastname']
-                            ],
-                            'car_plate': "1234 ABCD",
-                            'car_type': "Lexus",
-                            'repeat_daily': widget.repeatDaily,
-                            'repeat_weekly': widget.repeatWeekly,
-                            'repeat_monthly': widget.repeatMonthly,
-                          })
-                          .then((doc) {
-                            print("doc save successful");
-                            Alert(
-                              context: context,
-                              title: "Your Ride has been succesfully created",
-                              //desc: "Flutter is better with RFlutter Alert.",
-                              image: Image.asset("assets/bluetick.gif"),
-                            ).show();
-                          })
-                          .timeout(Duration(seconds: 2))
-                          .catchError((error) {
-                            print("doc save error");
-                            print(error);
-                            Alert(
-                              context: context,
-                              title: "Something went Wrong",
-                              //desc: "Flutter is better with RFlutter Alert.",
-                              image: Image.asset("assets/redx.png"),
-                            ).show();
-                          });}
-                          else{
-                            
-                          }
+                      if (widget.isDriver) {
+                        _db
+                            .collection("scheduled_rides")
+                            .add({
+                              'id': userInfo['id'].toString(),
+                              'firstname': userInfo['firstname'].toString(),
+                              'lastname': userInfo['lastname'].toString(),
+                              'phone_number':
+                                  userInfo['phone_number'].toString(),
+                              'age': userInfo["age"].toString(),
+                              'is_male': userInfo["is_male"].toString(),
+                              'rating': userInfo["rating"].toString(),
+                              'pick_up': GeoPoint(
+                                  widget.appState.initialPosition.latitude,
+                                  widget.appState.initialPosition.longitude),
+                              'pick_up_name':
+                                  widget.appState.locationController.text,
+                              'destination': GeoPoint(
+                                  widget.appState.lastPosition.latitude,
+                                  widget.appState.lastPosition.longitude),
+                              'destination_name':
+                                  widget.appState.destinationController.text,
+                              'trip_time': widget.toBeDisplayed,
+                              'driver': userInfo['firstname'].toString() +
+                                  " " +
+                                  userInfo['lastname'].toString(),
+                              'maximum_seats': 4.toString(),
+                              'riders': [
+                                userInfo['id'].toString() +
+                                    ";" +
+                                    userInfo['firstname'] +
+                                    "," +
+                                    userInfo['lastname']
+                              ],
+                              'car_plate': "1234 ABCD",
+                              'car_type': "Lexus",
+                              'repeat_daily': widget.repeatDaily,
+                              'repeat_weekly': widget.repeatWeekly,
+                              'repeat_monthly': widget.repeatMonthly,
+                            })
+                            .then((doc) {
+                              print("doc save successful");
+                              Alert(
+                                context: context,
+                                title: "Your Ride has been succesfully created",
+                                image: Image.asset("assets/bluetick.gif"),
+                              ).show();
+                            })
+                            .timeout(Duration(seconds: 2))
+                            .catchError((error) {
+                              print("doc save error");
+                              print(error);
+                              Alert(
+                                context: context,
+                                title: "Something went Wrong",
+                                image: Image.asset("assets/redx.png"),
+                              ).show();
+                            });
+                      } else {
+                        _db
+                            .collection("scheduled_rides")
+                            .add({
+                              'id': userInfo['id'].toString(),
+                              'firstname': userInfo['firstname'].toString(),
+                              'lastname': userInfo['lastname'].toString(),
+                              'phone_number':
+                                  userInfo['phone_number'].toString(),
+                              'age': userInfo["age"].toString(),
+                              'is_male': userInfo["is_male"].toString(),
+                              'rating': userInfo["rating"].toString(),
+                              'driver': "N/A",
+                              'pick_up': GeoPoint(
+                                  widget.appState.initialPosition.latitude,
+                                  widget.appState.initialPosition.longitude),
+                              'pick_up_name':
+                                  widget.appState.locationController.text,
+                              'destination': GeoPoint(
+                                  widget.appState.lastPosition.latitude,
+                                  widget.appState.lastPosition.longitude),
+                              'destination_name':
+                                  widget.appState.destinationController.text,
+                              'trip_time': widget.toBeDisplayed,
+                              'riders': [
+                                userInfo['id'].toString() +
+                                    ";" +
+                                    userInfo['firstname'] +
+                                    "," +
+                                    userInfo['lastname']
+                              ],
+                              'repeat_daily': widget.repeatDaily,
+                              'repeat_weekly': widget.repeatWeekly,
+                              'repeat_monthly': widget.repeatMonthly,
+                            })
+                            .then((doc) {
+                              print("doc save successful");
+                              Alert(
+                                context: context,
+                                title: "Your Ride has been succesfully created",
+                                image: Image.asset("assets/bluetick.gif"),
+                              ).show();
+                            })
+                            .timeout(Duration(seconds: 2))
+                            .catchError((error) {
+                              print("doc save error");
+                              print(error);
+                              Alert(
+                                context: context,
+                                title: "Something went Wrong",
+                                image: Image.asset("assets/redx.png"),
+                              ).show();
+                            });
+                      }
                     },
                     text: Text("Book Your Ride"),
                     height: 15,
