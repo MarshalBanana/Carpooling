@@ -223,7 +223,7 @@ class _SignInScreenState extends State<SignInScreen> {
 //                                        user = await _authService.emailSignIn(
 //                                            email.trim(), password);
                                         user = await _authService.emailSignIn(
-                                            'testemail6@email.com', '123456');
+                                            'testemail5@email.com', '123456');
                                         print(user.uid);
                                         if (user != null) {
                                           Navigator.push(

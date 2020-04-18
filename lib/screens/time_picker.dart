@@ -203,7 +203,7 @@ class _TimeBookingManagerState extends State<TimeBookingManager> {
                                   widget.appState.lastPosition.longitude),
                               'destination_name':
                                   widget.appState.destinationController.text,
-                              'trip_time': widget.toBeDisplayed,
+                              'trip_time': widget.toBeDisplayed.toString(),
                               'driver': userInfo['firstname'].toString() +
                                   " " +
                                   userInfo['lastname'].toString(),
@@ -262,7 +262,8 @@ class _TimeBookingManagerState extends State<TimeBookingManager> {
                                   widget.appState.lastPosition.longitude),
                               'destination_name':
                                   widget.appState.destinationController.text,
-                              'trip_time': widget.toBeDisplayed,
+                              'trip_time': widget.toBeDisplayed.toString(),
+                              'maximum_seats': 0.toString(),
                               'riders': [
                                 userInfo['id'].toString() +
                                     ";" +
@@ -270,6 +271,8 @@ class _TimeBookingManagerState extends State<TimeBookingManager> {
                                     "," +
                                     userInfo['lastname']
                               ],
+                              'car_plate': "",
+                              'car_type': "",
                               'repeat_daily': widget.repeatDaily,
                               'repeat_weekly': widget.repeatWeekly,
                               'repeat_monthly': widget.repeatMonthly,

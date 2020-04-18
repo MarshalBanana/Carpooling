@@ -6,10 +6,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:carpooling/utilities/constants.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-class ScheduledRidesWithDriver extends StatelessWidget {
-  const ScheduledRidesWithDriver({Key key}) : super(key: key);
+class ScheduledRidesWithoutDriver extends StatelessWidget {
+  const ScheduledRidesWithoutDriver({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -47,8 +48,7 @@ class ScheduledRidesWithDriver extends StatelessWidget {
             StreamBuilder(
                 stream: _db
                     .collection("scheduled_rides")
-                    .where('open_seats' , isGreaterThan: 0)
-                    //.where('driver', isEqualTo: 'N/A')
+                    .where('driver', isEqualTo: 'N/A')
                     .snapshots(),
                 builder: (context, snapshot) {
                   switch (snapshot.connectionState) {
@@ -66,6 +66,7 @@ class ScheduledRidesWithDriver extends StatelessWidget {
                         itemBuilder: (context, index) {
                           DocumentSnapshot tripInfo =
                               snapshot.data.documents[index];
+                          print(tripInfo.documentID);
                           // String driverName =
                           //     getInfo(tripInfo["driver_id"], "firstname");
                           //print("trip info" + tripInfo.toString());
@@ -93,7 +94,7 @@ class ScheduledRidesWithDriver extends StatelessWidget {
                                               carType: tripInfo['car_type'],
                                               maximumSeats:
                                                   tripInfo['maximum_seats'],
-                                              driverIsMale: tripInfo["is_male"],
+                                               driverIsMale: tripInfo["is_male"],
                                               userID: _authservice.fUser.uid,
                                               tripTime: tripInfo['trip_time'],
                                             )));
@@ -126,13 +127,13 @@ class ScheduledRidesWithDriver extends StatelessWidget {
                                       style: kTimePickTextStyle,
                                       textAlign: TextAlign.center,
                                     ),
-                                    Text(
-                                        "Available Seats: " +
-                                            (int.parse(tripInfo[
-                                                        "maximum_seats"]) -
-                                                    tripInfo["riders"].length)
-                                                .toString(),
-                                        style: kTimePickTextStyle),
+                                    // Text(
+                                    //     "Available Seats: " +
+                                    //         (int.parse(tripInfo[
+                                    //                     "maximum_seats"]) -
+                                    //                 tripInfo["riders"].length)
+                                    //             .toString(),
+                                    //     style: kTimePickTextStyle),
                                     Text(
                                       "Date & Time of the Trip: \n\t\t\t\t\t\t" +
                                           // DateFormat.yMEd()
@@ -140,14 +141,14 @@ class ScheduledRidesWithDriver extends StatelessWidget {
                                           //     .format(tripInfo["trip_time"]
                                           //         .toDate())
                                           //     .toString(), //for formatting
+                                          // to remove the accuracy of time
                                           tripInfo["trip_time"]
                                               .toString()
                                               .substring(
                                                   0,
                                                   tripInfo["trip_time"]
                                                       .toString()
-                                                      .lastIndexOf(
-                                                          ":")), //to remove the accuracy of time
+                                                      .lastIndexOf(":")),
                                       style: kTimePickTextStyle,
                                       textAlign: TextAlign.left,
                                     )
@@ -168,25 +169,3 @@ class ScheduledRidesWithDriver extends StatelessWidget {
     );
   }
 }
-
-//  getInfo(DocumentReference d, String field) async {
-//   final Firestore _db = Firestore.instance;
-//   String toBeReturned;
-//   String path = d.path;
-//   print(d.path);
-//   _db.document(path).get().then((doc) {
-//     if (doc.exists) {
-//       print("Document data:" + doc.data[field].toString());
-//       toBeReturned = doc.data[field];
-//       print("should return now");
-//       return toBeReturned.toString();
-//     } else {
-//       //toBeReturned = "Document does not exist";
-//       print("hasent returned1");
-//     }
-//     print("hasent returned2");
-//     return toBeReturned.toString();
-//   });
-//   print("hasent returned3");
-//   return toBeReturned;
-// }
