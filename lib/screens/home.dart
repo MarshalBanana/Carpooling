@@ -25,6 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: ClipPath(
                 clipper: AppBarClipper(),
                 child: AppBar(
+                  //leading: true,
                   automaticallyImplyLeading: true,
                   backgroundColor: kappBarColor,
                   title: Padding(
@@ -163,56 +164,54 @@ class _HomeScreenState extends State<HomeScreen> {
                                 // var current = appState.getCurrentLocation();
                                 // print(current.toString());
                                 // if(distance(current, tripInfo[] || )){
-                                if (!(tripInfo["driver"] == "Khaled")) {
-                                  // TODO make actual conditioning, at the moment it stops building if it reaches a false condition
                                   print("entered");
-                                  return Material(
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  RideInfoScreen(
-                                                    appState: appState,
-                                                    destinationLocation:
-                                                        destination,
-                                                    pickUpLocation: pickup,
-                                                    driverName:
-                                                        tripInfo["driver"],
-                                                    rating: 5.toString(),
-                                                  )),
-                                        );
-                                      },
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                            shape: BoxShape.rectangle,
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(8.0)),
-                                            color: kboxColor),
-                                        margin: EdgeInsets.all(4),
-                                        height: 16,
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: <Widget>[
-                                            Text("Driver: " +
-                                                tripInfo["driver"]),
-                                            Text("Pick up: " +
-                                                tripInfo["pick_up_name"]),
-                                            Text("Destination: " +
-                                                tripInfo["destination_name"]),
-                                            // getUserInfo(riderInfo["user_id"]
-                                            //     .toString()
-                                            //     .substring(7))
-                                          ],
+                                  return Visibility(
+                                    //visible: ((tripInfo["driver"] == "Osama")), // TODO make actual conditioning with distance
+                                    child: Material(
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    RideInfoScreen(
+                                                      appState: appState,
+                                                      destinationLocation:
+                                                          destination,
+                                                      pickUpLocation: pickup,
+                                                      driverName:
+                                                          tripInfo["driver"],
+                                                      rating: 5.toString(),
+                                                    )),
+                                          );
+                                        },
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              shape: BoxShape.rectangle,
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(8.0)),
+                                              color: kboxColor),
+                                          margin: EdgeInsets.all(4),
+                                          height: 16,
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            children: <Widget>[
+                                              Text("Driver: " +
+                                                  tripInfo["driver"]),
+                                              Text("From: " +
+                                                  tripInfo["pick_up_name"]),
+                                              Text("To: " +
+                                                  tripInfo["destination_name"]),
+                                              // getUserInfo(riderInfo["user_id"]
+                                              //     .toString()
+                                              //     .substring(7))
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ),
                                   );
-                                } else {
-                                  Container(child: Text("dsasd"));
-                                }
                               } else {
                                 return Container(
                                   child: Text("There is no data"),
@@ -230,9 +229,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: CustomButton(
                   buttonColor: kforwardButtonColor,
                   onPress: () {
+                    appState.clearMarkers();
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => MapScreen(appState: appState)),
+                      MaterialPageRoute(
+                          builder: (context) => MapScreen(appState: appState)),
                     );
                   },
                   text: Text(

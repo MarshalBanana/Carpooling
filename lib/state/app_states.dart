@@ -25,7 +25,7 @@ class AppState with ChangeNotifier {
   Set<Marker> get markers => _markers;
   Set<Polyline> get polylines => _polyLines;
   GoogleMapsPlaces get places => _places;
-   Set<Marker> _markers = {};
+  Set<Marker> _markers = {};
   final Set<Polyline> _polyLines = {};
 
   AppState() {
@@ -136,21 +136,27 @@ class AppState with ChangeNotifier {
     // double longitude = placemark[0].position.longitude;
     // LatLng destination = LatLng(latitude, longitude);
 
-      // get detail (lat/lng)
-      PlacesDetailsResponse detail =
-          await _places.getDetailsByPlaceId(prediction.placeId);
-          print(detail.toString());
-      final lat = detail.result.geometry.location.lat;
-      final lng = detail.result.geometry.location.lng;
-      LatLng destination = LatLng(lat, lng);
-      _addMarker(destination, userDistenation);
-      //_addMarker(destination, userDistenation);
-      // String route = await _googleMapsServices.getRouteCoordinates(
-      //     initialPosition, destination);
-      // print("$lat,$lng");
-      // createRoute(route);
-    notifyListeners();
+    // get detail (lat/lng)
+    PlacesDetailsResponse detail =
+        await _places.getDetailsByPlaceId(prediction.placeId);
+        print(detail.toString());
+    final lat = detail.result.geometry.location.lat;
+    final lng = detail.result.geometry.location.lng;
+    LatLng destination = LatLng(lat, lng);
+    _lastPosition = destination;
+    _addMarker(destination, userDistenation);
+    _addMarker(destination, userDistenation);
+    // String route = await _googleMapsServices.getRouteCoordinates(
+    //     initialPosition, destination);
+    // print("$lat,$lng");
+    // createRoute(route);
+  notifyListeners();
   }
+
+// CLEAR MARKERS
+void clearMarkers(){
+ _markers = {};
+}  
 
 // ON CAMERA MOVE
   void onCameraMove(CameraPosition position) {
@@ -167,7 +173,7 @@ class AppState with ChangeNotifier {
     // This is for displaying the ride information on the map of the ride info screen ie. begin, end, and route between them
   void onCreatedRideInfo(LatLng initial,LatLng destination) async {
     // markers.remove(markers.last);
-    _markers = {};
+      _markers = {};
      _addMarker(initial, "initial");
      _addMarker(destination, "destination");
     // print("*"*80);

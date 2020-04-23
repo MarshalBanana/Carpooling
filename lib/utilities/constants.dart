@@ -17,3 +17,13 @@ const ktitleTextStyle =
     TextStyle(fontFamily: 'Montserrat', fontSize: 30, color: Colors.white);
 const kTimePickTextStyle = TextStyle(
     fontFamily: 'Montserrat', fontSize: 15, fontWeight: FontWeight.w600);
+
+ BoxDecoration kpastRidesBox = BoxDecoration(
+    gradient: LinearGradient(
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+        colors: [ Colors.white30,Colors.white]),
+    shape: BoxShape.rectangle,
+    border: Border.all(),
+    borderRadius: BorderRadius.all(Radius.circular(8.0)),
+    color: kboxColor);

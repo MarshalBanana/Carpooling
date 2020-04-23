@@ -1,3 +1,4 @@
+import 'package:carpooling/screens/ride_information_screen.dart';
 import 'package:carpooling/screens/signup.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 //import 'package:google_sign_in/google_sign_in.dart';
@@ -11,6 +12,7 @@ class AuthService {
 
   Observable<FirebaseUser> user; // firebase user
   FirebaseUser fUser;
+
   Observable<Map<String, dynamic>> profile; // custom user data in Firestore
   PublishSubject loading = PublishSubject();
 
@@ -50,47 +52,25 @@ class AuthService {
         email: email, password: password);
 
     fUser = await _auth.currentUser();
-
     user = Observable(_auth.onAuthStateChanged);
     return fUser;
   }
 
-  Future<FirebaseUser> emailSignUp(
-      String email, String password, String phoneNumber) async {
+  Future<FirebaseUser> emailSignUp(String email, String password) async {
     try {
       AuthResult result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
-
       fUser = await _auth.currentUser();
       _id = fUser.uid;
-
-      print("userid: " + _id);
+      print(_id);
       user = Observable(_auth.onAuthStateChanged);
+
+      return fUser;
     } catch (e) {
       print('below error from: authService + emailsignup()');
       print(e);
-
       return null;
     }
-
-    bool isPhoneVerified = false;
-
-    /** verifying user phone*/
-    await _auth.verifyPhoneNumber(
-        phoneNumber: phoneNumber,
-        timeout: Duration(minutes: 2),
-        verificationCompleted: (AuthCredential credential) {
-          /** linking user with his phone*/
-          fUser.linkWithCredential(credential);
-          isPhoneVerified = true;
-        },
-        verificationFailed: null,
-        codeAutoRetrievalTimeout: (String verificationId) {},
-        codeSent: null);
-
-    /** check if email and phone are correct*/
-    user = Observable(_auth.onAuthStateChanged);
-    return ((fUser == null) || !isPhoneVerified) ? null : fUser;
   }
 
   Future<FirebaseUser> createNewUser(
@@ -102,7 +82,7 @@ class AuthService {
     String phoneNumber,
     Gender gender,
   ) async {
-    FirebaseUser user = await emailSignUp(email, password, phoneNumber);
+    FirebaseUser user = await emailSignUp(email, password);
 
     bool isMale = gender == Gender.Male ? true : false;
     await createUserData(firstName, lastName, age, isMale, phoneNumber, user);
@@ -125,10 +105,9 @@ class AuthService {
     });
   }
 
-  getUserData() async {
+  void getUserData() async {
     String id = fUser.uid;
     print(id);
-
     Stream<DocumentSnapshot> docStream = _db
         .collection('users')
         .document(id)
@@ -142,6 +121,38 @@ class AuthService {
     });
   }
 
+  Map<String, dynamic> getUserDetails() {
+    String id = fUser.uid;
+    print(id);
+    Stream<DocumentSnapshot> docStream = _db
+        .collection('users')
+        .document(id)
+        .snapshots(includeMetadataChanges: false);
+    Map<String, dynamic> userInfo  = Map<String,dynamic>();
+    //new Map<String, dynamic>();
+    print("user info" + userInfo.toString());
+
+    
+
+      print(docStream);
+      docStream.forEach((value) {
+      print("value"+value.data.toString());
+      userInfo.addAll(value.data);
+    });
+    print("user info" + userInfo.toString());
+    return userInfo;
+  }
+
+  // value.data.forEach((String val, dynamic x) {
+  //   if(val.toString() == "lastSeen"){
+  //     x = x.toDate();
+  //   }
+  //   print(val.toString() + ":" + x.toString());
+  //   try{userInfo.putIfAbsent(val.toString(),x.toString());}
+  //   catch(e){
+  //     print(e);
+  //   }
+
   Stream<DocumentSnapshot> getUserDataStream() {
     String id = fUser.uid;
     print(id);
@@ -149,7 +160,8 @@ class AuthService {
     return _db
         .collection('users')
         .document(id)
-        .snapshots(includeMetadataChanges: false);
+        .snapshots(includeMetadataChanges: false)
+        .asBroadcastStream();
   }
 
   Future<String> signOut() async {
