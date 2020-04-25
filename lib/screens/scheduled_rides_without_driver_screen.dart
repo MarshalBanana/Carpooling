@@ -115,17 +115,17 @@ class ScheduledRidesWithoutDriver extends StatelessWidget {
                                     //         kTimePickTextStyle), // we use it to get the driver info later but the method isnt here yet
                                     Text(
                                       "Driver: " + tripInfo["driver"],
-                                      style: kTimePickTextStyle,
+                                      style: kupcomingRidesTextStyle,
                                     ),
                                     Text(
                                         "Pick Up: " +
                                             tripInfo["pick_up_name"].toString(),
-                                        style: kTimePickTextStyle),
+                                        style: kupcomingRidesTextStyle),
                                     Text(
                                       "Destination: \n" +
                                           tripInfo["destination_name"]
                                               .toString(),
-                                      style: kTimePickTextStyle,
+                                      style: kupcomingRidesTextStyle,
                                       textAlign: TextAlign.center,
                                     ),
                                     // Text(
@@ -150,7 +150,7 @@ class ScheduledRidesWithoutDriver extends StatelessWidget {
                                                   tripInfo["trip_time"]
                                                       .toString()
                                                       .lastIndexOf(":")),
-                                      style: kTimePickTextStyle,
+                                      style: kupcomingRidesTextStyle,
                                       textAlign: TextAlign.left,
                                     )
                                   ],

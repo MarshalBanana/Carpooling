@@ -2,6 +2,7 @@ import 'package:carpooling/screens/past_rides_screen.dart';
 import 'package:carpooling/screens/ride_information_screen.dart';
 import 'package:carpooling/screens/scheduled_rides_with_driver_screen.dart';
 import 'package:carpooling/screens/scheduled_rides_without_driver_screen.dart';
+import 'package:carpooling/screens/settings_screen.dart';
 import 'package:carpooling/screens/signin.dart';
 import 'package:carpooling/screens/signup.dart';
 import 'package:carpooling/screens/test_screen.dart';
@@ -151,10 +152,10 @@ class _MapState extends State<Map> {
                 icon: Icon(Icons.people),
                 title: Text('Scheduled Rides Without a Driver'),
                 activeColor: Colors.purpleAccent),
-            BottomNavyBarItem(
-                icon: Icon(Icons.notifications),
-                title: Text('Messages'),
-                activeColor: Colors.pink),
+            // BottomNavyBarItem(
+            //     icon: Icon(Icons.notifications),
+            //     title: Text('Messages'),
+            //     activeColor: Colors.pink),
             BottomNavyBarItem(
                 icon: Icon(Icons.directions_car),
                 title: Text('Scheduled Rides With a Driver'),
@@ -202,10 +203,12 @@ class PageViewWidget extends StatelessWidget {
       children: <Widget>[
 //        MapScreen(appState: appState),
         HomeScreen(),
-        TestScreen(),
-        PastRidesScreen(), // <- this one adds a test user to the database on button click
+        //TestScreen(),
+        //PastRidesScreen(),
+        ScheduledRidesWithoutDriver(),
         ScheduledRidesWithDriver(),
-        UpcomingRidesScreen()
+        SettingsScreen()
+        //UpcomingRidesScreen()
         //RideInfoScreen(appState:appState) // making a ride information screen
 //      DemoRegisterScreen(),
       ],
