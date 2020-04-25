@@ -24,12 +24,12 @@ const kTimePickTextStyle = TextStyle(
 const kupcomingRidesTextStyle = TextStyle(
     color: Colors.white,
     fontFamily: 'Montserrat',
-    fontSize: 12,
+    fontSize: 13,
     fontWeight: FontWeight.w600);
 
 BoxDecoration kpastRidesBox = BoxDecoration(
-    // image: DecorationImage(
-    //     image: AssetImage('assets/fullBackground.jpeg'),fit: BoxFit.contain,),
+    image: DecorationImage(
+        image: AssetImage('assets/fullBackground.jpeg'),fit: BoxFit.fill,),
     gradient: LinearGradient(
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,

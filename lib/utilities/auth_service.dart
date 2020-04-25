@@ -115,7 +115,7 @@ class AuthService {
       'phone_number': phoneNumber,
       'age': age,
       'is_male': isMale,
-      'rating': 4.5,
+      'rating': 5,
       'lastSeen': DateTime.now()
     });
   }

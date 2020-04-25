@@ -20,7 +20,7 @@ class PastRidesScreen extends StatelessWidget {
               child: ClipPath(
                 clipper: AppBarClipper(),
                 child: AppBar(
-                  automaticallyImplyLeading: false,
+                  automaticallyImplyLeading: true,
                   flexibleSpace: Image(image: AssetImage('assets/fullBackground.jpeg'),fit: BoxFit.cover,),
                   backgroundColor: kappBarColor,
                   title: Padding(
@@ -69,11 +69,6 @@ class PastRidesScreen extends StatelessWidget {
                         itemBuilder: (context, index) {
                           DocumentSnapshot tripInfo =
                               snapshot.data.documents[index];
-                              //print("trip time :" + tripInfo[trip_time])
-                          // print("DateTime : " +
-                          //     DateTime.parse(tripInfo['triptime']).toString());
-                          // String driverName =
-                          //     getInfo(tripInfo["driver_id"], "firstname");
                           print("trip info" + tripInfo.data['riders'].toString());
                           print("date of trip : " + tripInfo['trip_time']);
                           return Visibility(
@@ -95,32 +90,32 @@ class PastRidesScreen extends StatelessWidget {
                                       Text(
                                           "Driver: " +
                                               tripInfo["driver"],
-                                          style: kTimePickTextStyle),
+                                          style: kupcomingRidesTextStyle),
                                           Text(
                                           "Contact Number: " +
                                               tripInfo["phone_number"],
-                                          style: kTimePickTextStyle),
+                                          style: kupcomingRidesTextStyle),
                                       Text(
                                           "Time of the Ride: " +
                                               tripInfo["trip_time"]
                                                   .substring(0,tripInfo['trip_time'].lastIndexOf(":")),
-                                          style: kTimePickTextStyle),
+                                          style: kupcomingRidesTextStyle),
                                       Text(
                                           "Pick Up: " +
                                               tripInfo["pick_up_name"]
                                                   .toString(),
-                                          style: kTimePickTextStyle),
+                                          style: kupcomingRidesTextStyle),
                                       Text(
-                                          "Destination: " +
+                                          "Destination: \n" +
                                               tripInfo["destination_name"]
                                                   .toString(),
-                                          style: kTimePickTextStyle),
+                                          style: kupcomingRidesTextStyle,textAlign: TextAlign.center,),
                                       Text(
                                           "Paid: " +
                                               tripInfo["amount_paid"]
                                                   .toString() +
                                               " SAR",
-                                          style: kTimePickTextStyle),
+                                          style: kupcomingRidesTextStyle),
                                     ],
                                   ),
                                 )),

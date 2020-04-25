@@ -117,17 +117,17 @@ class ScheduledRidesWithDriver extends StatelessWidget {
                                     //         kTimePickTextStyle), // we use it to get the driver info later but the method isnt here yet
                                     Text(
                                       "Driver: " + tripInfo["driver"],
-                                      style: kTimePickTextStyle,
+                                      style: kupcomingRidesTextStyle,
                                     ),
                                     Text(
                                         "Pick Up: " +
                                             tripInfo["pick_up_name"].toString(),
-                                        style: kTimePickTextStyle),
+                                        style: kupcomingRidesTextStyle),
                                     Text(
                                       "Destination: \n" +
                                           tripInfo["destination_name"]
                                               .toString(),
-                                      style: kTimePickTextStyle,
+                                      style: kupcomingRidesTextStyle,
                                       textAlign: TextAlign.center,
                                     ),
                                     Text(
@@ -136,7 +136,7 @@ class ScheduledRidesWithDriver extends StatelessWidget {
                                                         "maximum_seats"]) -
                                                     tripInfo["riders"].length)
                                                 .toString(),
-                                        style: kTimePickTextStyle),
+                                        style: kupcomingRidesTextStyle),
                                     Text(
                                       "Date & Time of the Trip: \n\t\t\t\t\t\t" +
                                           // DateFormat.yMEd()
@@ -152,7 +152,7 @@ class ScheduledRidesWithDriver extends StatelessWidget {
                                                       .toString()
                                                       .lastIndexOf(
                                                           ":")), //to remove the accuracy of time
-                                      style: kTimePickTextStyle,
+                                      style: kupcomingRidesTextStyle,
                                       textAlign: TextAlign.left,
                                     )
                                   ],

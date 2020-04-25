@@ -1,9 +1,13 @@
 import 'package:carpooling/screens/home.dart';
+import 'package:carpooling/screens/ride_information_screen.dart';
+import 'package:carpooling/state/app_states.dart';
 import 'package:carpooling/utilities/auth_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:carpooling/utilities/constants.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class UpcomingRidesScreen extends StatelessWidget {
   const UpcomingRidesScreen({Key key}) : super(key: key);
@@ -11,7 +15,8 @@ class UpcomingRidesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Firestore _db = Firestore.instance;
-
+    AppState appState = Provider.of<AppState>(context);
+    AuthService _authservice = AuthService();
     AuthService _authService = new AuthService();
     return Scaffold(
       appBar: PreferredSize(
@@ -20,7 +25,7 @@ class UpcomingRidesScreen extends StatelessWidget {
               child: ClipPath(
                 clipper: AppBarClipper(),
                 child: AppBar(
-                  automaticallyImplyLeading: false,
+                  automaticallyImplyLeading: true,
                   flexibleSpace: Image(image: AssetImage('assets/fullBackground.jpeg'),fit: BoxFit.cover,),
                   backgroundColor: kappBarColor,
                   title: Padding(
@@ -81,7 +86,34 @@ class UpcomingRidesScreen extends StatelessWidget {
                              DateTime.parse(tripInfo['trip_time'])
                                  .isAfter(DateTime.now())  ,
                                   child: GestureDetector(
-                                onTap: () {},
+                                onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => RideInfoScreen(
+                                              appState: appState,
+                                              destinationLocation: LatLng(
+                                                  tripInfo['destination']
+                                                      .latitude,
+                                                  tripInfo['destination']
+                                                      .longitude),
+                                              pickUpLocation: LatLng(
+                                                  tripInfo['pick_up'].latitude,
+                                                  tripInfo['pick_up']
+                                                      .longitude),
+                                              driverName: tripInfo['driver'],
+                                              rating: tripInfo['rating'],
+                                              rideID: tripInfo.documentID,
+                                              riders: tripInfo['riders'],
+                                              carPlate: tripInfo['car_plate'],
+                                              carType: tripInfo['car_type'],
+                                              maximumSeats:
+                                                  tripInfo['maximum_seats'],
+                                              driverIsMale: tripInfo["is_male"],
+                                              userID: _authservice.fUser.uid,
+                                              tripTime: tripInfo['trip_time'],
+                                            )));
+                              },
                                 child: Container(
                                   //padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
                                   decoration: kpastRidesBox,
@@ -108,10 +140,11 @@ class UpcomingRidesScreen extends StatelessWidget {
                                                   .toString(),
                                           style: kupcomingRidesTextStyle),
                                       Text(
-                                          "Destination: " +
+                                          "Destination: \n" +
                                               tripInfo["destination_name"]
                                                   .toString(),
-                                          style: kupcomingRidesTextStyle),
+                                          style: kupcomingRidesTextStyle,
+                                          textAlign: TextAlign.center,),
                                     ],
                                   ),
                                 )),
