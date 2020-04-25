@@ -35,20 +35,13 @@ class _LoadingScreenState extends State<LoadingScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         SpinKitFadingCube(
-                          color: Colors.yellow,
+                          color: Colors.indigo,
                           size: 50.0,
                         )
                       ],
                     ),
                     SizedBox(
                       height: 20,
-                    ),
-                    Visibility(
-                      visible: appState.locationServiceActive == false,
-                      child: Text(
-                        "Please enable location services!",
-                        style: TextStyle(color: Colors.black, fontSize: 18),
-                      ),
                     ),
                   ],
                 ))

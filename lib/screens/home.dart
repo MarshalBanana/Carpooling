@@ -25,15 +25,15 @@ class _HomeScreenState extends State<HomeScreen> {
               child: ClipPath(
                 clipper: AppBarClipper(),
                 child: AppBar(
-                  //leading: true,
-                  automaticallyImplyLeading: true,
+                  flexibleSpace: Image(image: AssetImage('assets/fullBackground.jpeg'),fit: BoxFit.cover,),
                   backgroundColor: kappBarColor,
+                  automaticallyImplyLeading: false,
                   title: Padding(
                     padding: EdgeInsets.only(top: 20, left: 20),
                     child: Text(
                       'Home',
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontFamily: 'Montserrat', fontSize: 30),
+                      style: TextStyle(fontFamily: 'Montserrat', fontSize: 24),
                     ),
                   ),
                 ),
@@ -53,68 +53,68 @@ class _HomeScreenState extends State<HomeScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text(
-                'Recent Rides',
-                style: TextStyle(
-                    fontFamily: 'Montserrat',
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600),
-              ),
-              StreamBuilder(
-                  stream: _db.collection("user_auth").snapshots(),
-                  builder: (context, snapshot) {
-                    switch (snapshot.connectionState) {
-                      case ConnectionState.none:
-                        return Text(
-                            "It appears something is wrong with the network");
-                      case ConnectionState.waiting:
-                        return Center(child: CircularProgressIndicator());
-                      case ConnectionState.active:
-                        return Expanded(
-                          child: new ListView.builder(
-                              shrinkWrap: true,
-                              scrollDirection: Axis.horizontal,
-                              itemCount: snapshot.data.documents.length,
-                              itemBuilder: (context, index) {
-                                DocumentSnapshot riderInfo =
-                                    snapshot.data.documents[index];
-                                return Material(
-                                    child: GestureDetector(
-                                  onTap: () {
-                                    // Navigator.push(
-                                    //   context,
-                                    //   MaterialPageRoute(
-                                    //       builder: (context) => RideInfoScreen(
-                                    //             appState: appState,
-                                    //           )),
-                                    // );
-                                  },
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                        shape: BoxShape.rectangle,
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(8.0)),
-                                        color: kboxColor),
-                                    margin: EdgeInsets.all(4),
-                                    height: 16,
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: <Widget>[
-                                        Text(riderInfo["email"]),
-                                        Text(riderInfo["mobile"])
-                                        //Text(ds["user_id"].toString())
-                                      ],
-                                    ),
-                                  ),
-                                ));
-                              }),
-                        );
-                      case ConnectionState.done:
-                        return Text("sd");
-                    }
-                    return Text("stream Complete");
-                  }),
+              // Text(
+              //   'Recent Rides',
+              //   style: TextStyle(
+              //       fontFamily: 'Montserrat',
+              //       fontSize: 20,
+              //       fontWeight: FontWeight.w600),
+              // ),
+              // StreamBuilder(
+              //     stream: _db.collection("user_auth").snapshots(),
+              //     builder: (context, snapshot) {
+              //       switch (snapshot.connectionState) {
+              //         case ConnectionState.none:
+              //           return Text(
+              //               "It appears something is wrong with the network");
+              //         case ConnectionState.waiting:
+              //           return Center(child: CircularProgressIndicator());
+              //         case ConnectionState.active:
+              //           return Expanded(
+              //             child: new ListView.builder(
+              //                 shrinkWrap: true,
+              //                 scrollDirection: Axis.horizontal,
+              //                 itemCount: snapshot.data.documents.length,
+              //                 itemBuilder: (context, index) {
+              //                   DocumentSnapshot riderInfo =
+              //                       snapshot.data.documents[index];
+              //                   return Material(
+              //                       child: GestureDetector(
+              //                     onTap: () {
+              //                       // Navigator.push(
+              //                       //   context,
+              //                       //   MaterialPageRoute(
+              //                       //       builder: (context) => RideInfoScreen(
+              //                       //             appState: appState,
+              //                       //           )),
+              //                       // );
+              //                     },
+              //                     child: Container(
+              //                       decoration: BoxDecoration(
+              //                           shape: BoxShape.rectangle,
+              //                           borderRadius: BorderRadius.all(
+              //                               Radius.circular(8.0)),
+              //                           color: kboxColor),
+              //                       margin: EdgeInsets.all(4),
+              //                       height: 16,
+              //                       child: Column(
+              //                         mainAxisAlignment:
+              //                             MainAxisAlignment.spaceEvenly,
+              //                         children: <Widget>[
+              //                           Text(riderInfo["email"]),
+              //                           Text(riderInfo["mobile"])
+              //                           //Text(ds["user_id"].toString())
+              //                         ],
+              //                       ),
+              //                     ),
+              //                   ));
+              //                 }),
+              //           );
+              //         case ConnectionState.done:
+              //           return Text("sd");
+              //       }
+              //       return Text("stream Complete");
+              //     }),
               Text(
                 'People near You',
                 style: TextStyle(
@@ -227,7 +227,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   }),
               Container(
                 child: CustomButton(
-                  buttonColor: kforwardButtonColor,
+                  buttonColor: kindigoThemeColor,
                   onPress: () {
                     appState.clearMarkers();
                     Navigator.push(
@@ -239,12 +239,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   text: Text(
                     'Schedule a Ride',
                     style: TextStyle(
+                        color: Colors.white,
                         fontFamily: 'Montserrat',
                         fontSize: 20,
                         fontWeight: FontWeight.w600),
                   ),
                   height: MediaQuery.of(context).size.height / 6,
-                  textColor: Colors.black,
+                  textColor: Colors.white,
                   width: double.infinity,
                 ),
               ),

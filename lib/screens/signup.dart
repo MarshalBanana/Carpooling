@@ -60,7 +60,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     width: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(
                         image: DecorationImage(
-                            image: AssetImage('assets/background.png'),
+                            image: AssetImage('assets/fullBackground.jpeg'),
                             fit: BoxFit.fill)),
                   ),
                   SingleChildScrollView(

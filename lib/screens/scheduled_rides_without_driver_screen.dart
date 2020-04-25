@@ -24,14 +24,15 @@ class ScheduledRidesWithoutDriver extends StatelessWidget {
               child: ClipPath(
                 clipper: AppBarClipper(),
                 child: AppBar(
-                  automaticallyImplyLeading: true,
+                  automaticallyImplyLeading: false,
+                  flexibleSpace: Image(image: AssetImage('assets/fullBackground.jpeg'),fit: BoxFit.cover,),
                   backgroundColor: kappBarColor,
                   title: Padding(
                     padding: EdgeInsets.only(top: 20, left: 20),
                     child: Text(
-                      'Scheduled Rides',
+                      'Assign Yourself as a Rider',
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontFamily: 'Montserrat', fontSize: 30),
+                      style: TextStyle(fontFamily: 'Montserrat', fontSize: 24),
                     ),
                   ),
                 ),

@@ -128,15 +128,13 @@ class AuthService {
         .collection('users')
         .document(id)
         .snapshots(includeMetadataChanges: false);
-    Map<String, dynamic> userInfo  = Map<String,dynamic>();
+    Map<String, dynamic> userInfo = Map<String, dynamic>();
     //new Map<String, dynamic>();
     print("user info" + userInfo.toString());
 
-    
-
-      print(docStream);
-      docStream.forEach((value) {
-      print("value"+value.data.toString());
+    print(docStream);
+    docStream.forEach((value) {
+      print("value" + value.data.toString());
       userInfo.addAll(value.data);
     });
     print("user info" + userInfo.toString());

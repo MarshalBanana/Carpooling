@@ -5,6 +5,7 @@ import 'package:carpooling/screens/scheduled_rides_without_driver_screen.dart';
 import 'package:carpooling/screens/signin.dart';
 import 'package:carpooling/screens/signup.dart';
 import 'package:carpooling/screens/test_screen.dart';
+import 'package:carpooling/screens/upcoming_rides_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_google_places/flutter_google_places.dart';
@@ -137,7 +138,7 @@ class _MapState extends State<Map> {
           onItemSelected: (index) => setState(() {
             selectedPage = index;
             controller.animateToPage(index,
-                duration: Duration(milliseconds: 300), curve: Curves.ease);
+                duration: Duration(milliseconds: 400), curve: Curves.fastLinearToSlowEaseIn);
           }),
           items: [
             BottomNavyBarItem(
@@ -154,13 +155,13 @@ class _MapState extends State<Map> {
                 title: Text('Messages'),
                 activeColor: Colors.pink),
             BottomNavyBarItem(
-                icon: Icon(Icons.settings),
-                title: Text('Settings'),
-                activeColor: Colors.blue),
-            BottomNavyBarItem(
                 icon: Icon(Icons.directions_car),
                 title: Text('Scheduled Rides With a Driver'),
                 activeColor: Colors.pink),
+            BottomNavyBarItem(
+                icon: Icon(Icons.settings),
+                title: Text('Settings'),
+                activeColor: Colors.blue),
           ],
         ),
         body: PageViewWidget(
@@ -201,9 +202,10 @@ class PageViewWidget extends StatelessWidget {
 //        MapScreen(appState: appState),
         HomeScreen(),
         ScheduledRidesWithoutDriver(),
-        SignUpScreen(), // <- this one adds a test user to the database on button click
-        SignInScreen(),
-        ScheduledRidesWithDriver()        //RideInfoScreen(appState:appState) // making a ride information screen 
+        PastRidesScreen(), // <- this one adds a test user to the database on button click
+        ScheduledRidesWithDriver()  ,
+        UpcomingRidesScreen()
+              //RideInfoScreen(appState:appState) // making a ride information screen 
 //      DemoRegisterScreen(),
       ],
     );

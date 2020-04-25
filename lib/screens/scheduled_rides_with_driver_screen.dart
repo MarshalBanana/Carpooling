@@ -23,14 +23,18 @@ class ScheduledRidesWithDriver extends StatelessWidget {
               child: ClipPath(
                 clipper: AppBarClipper(),
                 child: AppBar(
-                  automaticallyImplyLeading: true,
+                  automaticallyImplyLeading: false,
+                  flexibleSpace: Image(
+                    image: AssetImage('assets/fullBackground.jpeg'),
+                    fit: BoxFit.cover,
+                  ),
                   backgroundColor: kappBarColor,
                   title: Padding(
                     padding: EdgeInsets.only(top: 20, left: 20),
                     child: Text(
-                      'Scheduled Rides',
+                      'Ride in one of These',
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontFamily: 'Montserrat', fontSize: 30),
+                      style: TextStyle(fontFamily: 'Montserrat', fontSize: 24),
                     ),
                   ),
                 ),
@@ -47,7 +51,7 @@ class ScheduledRidesWithDriver extends StatelessWidget {
             StreamBuilder(
                 stream: _db
                     .collection("scheduled_rides")
-                    .where('open_seats' , isGreaterThan: 0)
+                    .where('open_seats', isGreaterThan: 0)
                     //.where('driver', isEqualTo: 'N/A')
                     .snapshots(),
                 builder: (context, snapshot) {
