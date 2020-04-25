@@ -200,7 +200,7 @@ class _RideInfoScreenState extends State<RideInfoScreen> {
                     child: Text(
                       'Ride Information',
                       textAlign: TextAlign.left,
-                      style: TextStyle(fontFamily: 'Montserrat', fontSize: 25),
+                      style: TextStyle(fontFamily: 'Montserrat', fontSize: 24),
                     ),
                   ),
                 ),

@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:carpooling/utilities/constants.dart';
 import 'package:intl/intl.dart';
 
-class PastRidesScreen extends StatelessWidget {
-  const PastRidesScreen({Key key}) : super(key: key);
+class UpcomingRidesScreen extends StatelessWidget {
+  const UpcomingRidesScreen({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class PastRidesScreen extends StatelessWidget {
                   title: Padding(
                     padding: EdgeInsets.only(top: 20, left: 20),
                     child: Text(
-                      'Your Past Rides',
+                      'Your Upcoming Rides',
                       textAlign: TextAlign.center,
                       style: TextStyle(fontFamily: 'Montserrat', fontSize: 24),
                     ),
@@ -79,48 +79,39 @@ class PastRidesScreen extends StatelessWidget {
                           return Visibility(
                             visible: tripInfo['riders'].toString().contains(_authService.fUser.uid) &&
                              DateTime.parse(tripInfo['trip_time'])
-                                 .isBefore(DateTime.now())  ,
+                                 .isAfter(DateTime.now())  ,
                                   child: GestureDetector(
                                 onTap: () {},
                                 child: Container(
                                   //padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
                                   decoration: kpastRidesBox,
                                   margin: EdgeInsets.fromLTRB(16, 0, 16, 16),
-                                  height: 160,
+                                  height: 200,
                                   width: double.infinity,
                                   child: Column(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceEvenly,
                                     children: <Widget>[
                                       Text(
-                                          "Driver: " +
-                                              tripInfo["driver"],
-                                          style: kTimePickTextStyle),
-                                          Text(
-                                          "Contact Number: " +
-                                              tripInfo["phone_number"],
-                                          style: kTimePickTextStyle),
+                                            (tripInfo['driver'] == "N/A")
+                                            ? "Driver is not yet set for this ride"
+                                            : "Driver: " + tripInfo['driver'],
+                                          style: kupcomingRidesTextStyle),
                                       Text(
                                           "Time of the Ride: " +
                                               tripInfo["trip_time"]
                                                   .substring(0,tripInfo['trip_time'].lastIndexOf(":")),
-                                          style: kTimePickTextStyle),
+                                          style: kupcomingRidesTextStyle),
                                       Text(
                                           "Pick Up: " +
                                               tripInfo["pick_up_name"]
                                                   .toString(),
-                                          style: kTimePickTextStyle),
+                                          style: kupcomingRidesTextStyle),
                                       Text(
                                           "Destination: " +
                                               tripInfo["destination_name"]
                                                   .toString(),
-                                          style: kTimePickTextStyle),
-                                      Text(
-                                          "Paid: " +
-                                              tripInfo["amount_paid"]
-                                                  .toString() +
-                                              " SAR",
-                                          style: kTimePickTextStyle),
+                                          style: kupcomingRidesTextStyle),
                                     ],
                                   ),
                                 )),

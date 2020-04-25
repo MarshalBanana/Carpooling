@@ -51,12 +51,13 @@ class _TimeBookingManagerState extends State<TimeBookingManager> {
               children: <Widget>[
                 Icon(
                   Icons.keyboard_arrow_up,
-                  color: kappBarColor,
+                  color: Colors.white,
                   size: 40.0,
                 ),
                 GestureDetector(
                   onTap: () {},
                   child: Container(
+                    decoration: BoxDecoration(image: new DecorationImage(image: AssetImage('assets/fullBackground.jpeg'))),
                     child: Text("Start Your Ride",
                         style: kmediumTitleTextStyle,
                         textAlign: TextAlign.center),
@@ -109,9 +110,9 @@ class _TimeBookingManagerState extends State<TimeBookingManager> {
                           },
                           text: Text("No"),
                           height: 3,
-                          buttonColor: kforwardButtonColor,
+                          buttonColor: kindigoThemeColor,
                           width: 5,
-                          textColor: Colors.black),
+                          textColor: Colors.white),
                       CustomButton(
                           onPress: () {
                             widget.repeatDaily = true;
@@ -120,9 +121,9 @@ class _TimeBookingManagerState extends State<TimeBookingManager> {
                           },
                           text: Text("Daily"),
                           height: 3,
-                          buttonColor: kforwardButtonColor,
+                          buttonColor: kindigoThemeColor,
                           width: 5,
-                          textColor: Colors.black),
+                          textColor: Colors.white),
                       CustomButton(
                           onPress: () {
                             widget.repeatDaily = false;
@@ -131,9 +132,9 @@ class _TimeBookingManagerState extends State<TimeBookingManager> {
                           },
                           text: Text("Weekly"),
                           height: 3,
-                          buttonColor: kforwardButtonColor,
+                          buttonColor: kindigoThemeColor,
                           width: 5,
-                          textColor: Colors.black),
+                          textColor: Colors.white),
                       CustomButton(
                           onPress: () {
                             widget.repeatDaily = false;
@@ -142,9 +143,9 @@ class _TimeBookingManagerState extends State<TimeBookingManager> {
                           },
                           text: Text("Monthly"),
                           height: 3,
-                          buttonColor: kforwardButtonColor,
+                          buttonColor: kindigoThemeColor,
                           width: 5,
-                          textColor: Colors.black)
+                          textColor: Colors.white)
                     ],
                   ),
                 ),
@@ -299,9 +300,9 @@ class _TimeBookingManagerState extends State<TimeBookingManager> {
                     },
                     text: Text("Book Your Ride"),
                     height: 15,
-                    buttonColor: kforwardButtonColor,
+                    buttonColor: kindigoThemeColor,
                     width: 20,
-                    textColor: Colors.black)
+                    textColor: Colors.white)
               ],
             ),
           ),

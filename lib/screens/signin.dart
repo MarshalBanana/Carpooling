@@ -105,14 +105,14 @@ class _SignInScreenState extends State<SignInScreen> {
             : SingleChildScrollView(
                 child: Container(
                   width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height - 56,
+                  height: MediaQuery.of(context).size.height,
                   child: Stack(
                     children: <Widget>[
                       Container(
                         width: double.infinity,
                         height: double.infinity,
                         child: Image.asset(
-                          'assets/background.png',
+                          'assets/fullBackground.jpeg',
                           fit: BoxFit.fill,
                         ),
                       ),
@@ -132,7 +132,7 @@ class _SignInScreenState extends State<SignInScreen> {
                               height: 13,
                             ),
                             Text(
-                              "RESTAPP",
+                              "CAPP",
                               style: GoogleFonts.roboto(
                                   textStyle: TextStyle(
                                       fontSize: 27,
@@ -164,7 +164,7 @@ class _SignInScreenState extends State<SignInScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
                                 Text(
-                                  "You'r Delicios meal is Waiting 😋",
+                                  "Share a Ride with Us",
                                   textAlign: TextAlign.center,
                                   style: GoogleFonts.roboto(
                                     textStyle: TextStyle(
@@ -223,7 +223,7 @@ class _SignInScreenState extends State<SignInScreen> {
 //                                        user = await _authService.emailSignIn(
 //                                            email.trim(), password);
                                         user = await _authService.emailSignIn(
-                                            'testemail5@email.com', '123456');
+                                            'testemail6@email.com', '123456');
                                         print(user.uid);
                                         if (user != null) {
                                           Navigator.push(
