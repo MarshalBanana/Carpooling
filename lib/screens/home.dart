@@ -236,29 +236,35 @@ class _HomeScreenState extends State<HomeScreen> {
                     }
                     return Container();
                   }),
-              Container(
-                child: CustomButton(
-                  onPress: () {
-                    print('logout button pressed');
-                    logout();
-                  },
-                  text: Text('temp logout button'),
-                  buttonColor: kforwardButtonColor,
-                  height: MediaQuery.of(context).size.height / 12,
-                  textColor: Colors.white,
-                  width: double.infinity,
-                ),
-              ),
+//              Container(
+//                child: CustomButton(
+//                  onPress: () {
+//                    print('logout button pressed');
+//                    logout();
+//                  },
+//                  text: Text('temp logout button'),
+//                  buttonColor: kforwardButtonColor,
+//                  height: MediaQuery.of(context).size.height / 12,
+//                  textColor: Colors.white,
+//                  width: double.infinity,
+//                ),
+//              ),
               Container(
                 child: CustomButton(
                   buttonColor: kindigoThemeColor,
                   onPress: () {
                     appState.clearMarkers();
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => MapScreen(appState: appState)),
-                    );
+
+                    try {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                MapScreen(appState: appState)),
+                      );
+                    } catch (e) {
+                      print(e);
+                    }
                   },
                   text: Text(
                     'Schedule a Ride',
