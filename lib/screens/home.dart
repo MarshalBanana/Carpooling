@@ -127,7 +127,7 @@ class _HomeScreenState extends State<HomeScreen> {
               //       return Text("stream Complete");
               //     }),
               Text(
-                'People near You',
+                'Rides near You',
                 style: TextStyle(
                     fontFamily: 'Montserrat',
                     fontSize: 20,
@@ -198,26 +198,30 @@ class _HomeScreenState extends State<HomeScreen> {
                                       },
                                       child: Container(
                                         decoration: BoxDecoration(
+                                            image: DecorationImage(image: AssetImage("assets/fullBackground.jpeg"),fit:BoxFit.fill),
                                             shape: BoxShape.rectangle,
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(8.0)),
                                             color: kboxColor),
                                         margin: EdgeInsets.all(4),
                                         height: 16,
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: <Widget>[
-                                            Text("Driver: " +
-                                                tripInfo["driver"]),
-                                            Text("From: " +
-                                                tripInfo["pick_up_name"]),
-                                            Text("To: " +
-                                                tripInfo["destination_name"]),
-                                            // getUserInfo(riderInfo["user_id"]
-                                            //     .toString()
-                                            //     .substring(7))
-                                          ],
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(12.0),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            children: <Widget>[
+                                              Text("Driver: " +
+                                                  tripInfo["driver"],style: kupcomingRidesTextStyle,),
+                                              Text("From: " +
+                                                  tripInfo["pick_up_name"],style: kupcomingRidesTextStyle),
+                                              Text("To: \n" +
+                                                  tripInfo["destination_name"],style: kupcomingRidesTextStyle,textAlign: TextAlign.center,),
+                                              // getUserInfo(riderInfo["user_id"]
+                                              //     .toString()
+                                              //     .substring(7))
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ),

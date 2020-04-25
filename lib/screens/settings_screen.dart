@@ -1,3 +1,4 @@
+import 'package:carpooling/screens/change_info_screen.dart';
 import 'package:carpooling/screens/test_screen.dart';
 import 'package:carpooling/screens/upcoming_rides_screen.dart';
 import 'package:carpooling/utilities/auth_service.dart';
@@ -95,12 +96,37 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   title: Text("Full Name"),
                   subtitle:
                       Text(userInfo['firstname'] + " " + userInfo['lastname']),
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ChangeInfoScreen(
+                                  hintText: "Enter Your Full Name",
+                                  titleText: "Update Your Name",
+                                  descriptionText:
+                                      "Your name makes it easy for the Drivers to confirm who they pick up",
+                                  userID: userInfo['id'],
+                                  fieldToChange: "name",
+                                )));
+                  },
                 ),
                 ListTile(
                   isThreeLine: true,
                   leading: Icon(Icons.phone_android),
                   title: Text("Phone Number"),
                   subtitle: Text(userInfo['phone_number']),
+                  onTap: (){
+                    Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ChangeInfoScreen(
+                                hintText: "Enter Your Phone Number",
+                                titleText: "Update Your Number",
+                                descriptionText: "Your number makes it easy for the Drivers to contact you",
+                                userID: userInfo['id'],
+                                fieldToChange: "phone_number",
+                              )));
+                  },
                 ),
                 // ListTile(
                 //   isThreeLine: true,

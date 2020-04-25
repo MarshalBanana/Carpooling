@@ -152,10 +152,10 @@ class _MapState extends State<Map> {
                 icon: Icon(Icons.people),
                 title: Text('Scheduled Rides Without a Driver'),
                 activeColor: Colors.purpleAccent),
-            BottomNavyBarItem(
-                icon: Icon(Icons.notifications),
-                title: Text('Messages'),
-                activeColor: Colors.pink),
+            // BottomNavyBarItem(
+            //     icon: Icon(Icons.notifications),
+            //     title: Text('Messages'),
+            //     activeColor: Colors.pink),
             BottomNavyBarItem(
                 icon: Icon(Icons.directions_car),
                 title: Text('Scheduled Rides With a Driver'),
@@ -203,8 +203,9 @@ class PageViewWidget extends StatelessWidget {
       children: <Widget>[
 //        MapScreen(appState: appState),
         HomeScreen(),
-        TestScreen(),
-        PastRidesScreen(), // <- this one adds a test user to the database on button click
+        //TestScreen(),
+        //PastRidesScreen(),
+        ScheduledRidesWithoutDriver(),
         ScheduledRidesWithDriver(),
         SettingsScreen()
         //UpcomingRidesScreen()
