@@ -138,7 +138,8 @@ class _MapState extends State<Map> {
           onItemSelected: (index) => setState(() {
             selectedPage = index;
             controller.animateToPage(index,
-                duration: Duration(milliseconds: 400), curve: Curves.fastLinearToSlowEaseIn);
+                duration: Duration(milliseconds: 400),
+                curve: Curves.fastLinearToSlowEaseIn);
           }),
           items: [
             BottomNavyBarItem(
@@ -201,11 +202,11 @@ class PageViewWidget extends StatelessWidget {
       children: <Widget>[
 //        MapScreen(appState: appState),
         HomeScreen(),
-        ScheduledRidesWithoutDriver(),
+        TestScreen(),
         PastRidesScreen(), // <- this one adds a test user to the database on button click
-        ScheduledRidesWithDriver()  ,
+        ScheduledRidesWithDriver(),
         UpcomingRidesScreen()
-              //RideInfoScreen(appState:appState) // making a ride information screen 
+        //RideInfoScreen(appState:appState) // making a ride information screen
 //      DemoRegisterScreen(),
       ],
     );

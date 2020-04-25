@@ -5,11 +5,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:rxdart/rxdart.dart';
 import 'utilities.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final Firestore _db = Firestore.instance;
-
+  SharedPreferences prefs;
   Observable<FirebaseUser> user; // firebase user
   FirebaseUser fUser;
 
@@ -47,12 +48,22 @@ class AuthService {
     return fUser;
   }
 
+  bool isBusy = false;
+
   Future<FirebaseUser> emailSignIn(String email, String password) async {
+    isBusy = true;
     AuthResult result = await _auth.signInWithEmailAndPassword(
         email: email, password: password);
 
+    prefs = await SharedPreferences.getInstance();
+    prefs.setString("email", email);
+    prefs.setString('password', password);
+
+    print("saved email:" + prefs.getString("email"));
+
     fUser = await _auth.currentUser();
     user = Observable(_auth.onAuthStateChanged);
+    isBusy = false;
     return fUser;
   }
 
@@ -64,6 +75,10 @@ class AuthService {
       _id = fUser.uid;
       print(_id);
       user = Observable(_auth.onAuthStateChanged);
+
+      prefs = await SharedPreferences.getInstance();
+      prefs.setString("email", email);
+      prefs.setString('password', password);
 
       return fUser;
     } catch (e) {
@@ -165,6 +180,8 @@ class AuthService {
   Future<String> signOut() async {
     try {
       await _auth.signOut();
+      prefs.setString('email', null);
+      prefs.setString('password', null);
       return 'SignOut';
     } catch (e) {
       print('below error from: authService + signout');

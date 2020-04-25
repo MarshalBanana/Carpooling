@@ -1,6 +1,7 @@
 import 'package:carpooling/utilities/auth_service.dart';
 import 'package:carpooling/utilities/constants.dart';
 import 'package:carpooling/utilities/utilities.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -12,6 +13,8 @@ class TestScreen extends StatefulWidget {
 class _TestScreenState extends State<TestScreen> {
   FirebaseUser currentUser;
   AuthService _authService = AuthService();
+  final Firestore _db = Firestore.instance;
+  double allowedDistance = 12;
 
   @override
   void initState() {
