@@ -52,7 +52,12 @@ class CustomButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         color: buttonColor,
         child: MaterialButton(
-            onPressed: onPress, minWidth: width, height: height, child: text),
+          onPressed: onPress,
+          minWidth: width,
+          height: height,
+          child: text,
+          textColor: textColor,
+        ),
       ),
     );
   }
@@ -77,5 +82,3 @@ class ItemBox extends StatelessWidget {
     );
   }
 }
-
-
