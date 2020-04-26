@@ -118,6 +118,18 @@ class _MapScreenState extends State<MapScreen> {
                   border: InputBorder.none,
                   contentPadding: EdgeInsets.only(left: 15.0, top: 16.0),
                 ),
+                onTap: () async {
+                  widget.appState.getOLocationAutoCompletePickup(context);
+                  widget.appState.sendRequestPickup(
+                      widget.appState.pickupPrediction.description);
+                },
+                onSubmitted: (value) {
+                  setState(() {
+                    widget.appState.sendRequestPickup(value);
+                    showScheduler = true;
+                    print("Show Scheduler: " + showScheduler.toString());
+                  });
+                },
               ),
             ),
           ),
@@ -209,7 +221,7 @@ class _MapScreenState extends State<MapScreen> {
                 inactiveTrackColor: Colors.green,
                 onChanged: (bool newValue) {
                   setState(() {
-                    print("isDriver: "+newValue.toString());
+                    print("isDriver: " + newValue.toString());
                     isDriver = newValue;
                     switchFunction(newValue);
                   });
@@ -229,4 +241,5 @@ class _MapScreenState extends State<MapScreen> {
   }
 }
 
+///most important method
 void makeTrip() {}

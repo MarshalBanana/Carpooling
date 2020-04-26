@@ -7,6 +7,9 @@ import 'package:carpooling/utilities/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:carpooling/utilities/utilities.dart';
+
+import '../utilities/GPS_util.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -143,13 +146,16 @@ class _HomeScreenState extends State<HomeScreen> {
                       case ConnectionState.waiting:
                         return Center(child: CircularProgressIndicator());
                       case ConnectionState.active:
-                        return Expanded(
+                        return Container(
+                          height: MediaQuery.of(context).size.height / 3,
                           child: new ListView.builder(
                             shrinkWrap: true,
                             scrollDirection: Axis.horizontal,
+//                            itemExtent: MediaQuery.of(context).size.width / 2,
                             itemCount: snapshot.data.documents.length,
                             itemBuilder: (context, index) {
                               if (snapshot.hasData) {
+                                print("trying to get trip info");
                                 DocumentSnapshot tripInfo =
                                     snapshot.data.documents[index];
                                 // print("length" +
@@ -172,68 +178,116 @@ class _HomeScreenState extends State<HomeScreen> {
 
                                 // print("A" * 100);
                                 // if(distance(, point2))
-                                // var current = appState.getCurrentLocation();
+                                var current = appState.initialPosition;
                                 // print(current.toString());
                                 // if(distance(current, tripInfo[] || )){
+                                print(distance(current, pickup));
                                 print("entered");
                                 return Visibility(
-                                  //visible: ((tripInfo["driver"] == "Osama")), // TODO make actual conditioning with distance
-                                  child: Material(
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  RideInfoScreen(
-                                                    appState: appState,
-                                                    destinationLocation:
-                                                        destination,
-                                                    pickUpLocation: pickup,
-                                                    driverName:
-                                                        tripInfo["driver"],
-                                                    rating: 5.toString(),
-                                                  )),
-                                        );
-                                      },
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                            image: DecorationImage(
-                                                image: AssetImage(
-                                                    "assets/fullBackground.jpeg"),
-                                                fit: BoxFit.fill),
-                                            shape: BoxShape.rectangle,
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(8.0)),
-                                            color: kboxColor),
-                                        margin: EdgeInsets.all(4),
-                                        height: 16,
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(12.0),
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceEvenly,
-                                            children: <Widget>[
-                                              Text(
-                                                "Driver: " + tripInfo["driver"],
-                                                style: kupcomingRidesTextStyle,
-                                              ),
-                                              Text(
-                                                  "From: " +
-                                                      tripInfo["pick_up_name"],
+                                  visible: tripInfo['driver']
+                                              .toString()
+                                              .compareTo("N/A") !=
+                                          0 &&
+                                      (double.parse(distance(current, pickup)) <
+                                              100 ||
+                                          double.parse(distance(
+                                                  current, destination)) <
+                                              100),
+                                  child: Container(
+                                    width:
+                                        MediaQuery.of(context).size.width / 2,
+                                    child: Material(
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          AuthService _authservice =
+                                              AuthService();
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    RideInfoScreen(
+                                                      appState: appState,
+                                                      destinationLocation: LatLng(
+                                                          tripInfo[
+                                                                  'destination']
+                                                              .latitude,
+                                                          tripInfo[
+                                                                  'destination']
+                                                              .longitude),
+                                                      pickUpLocation: LatLng(
+                                                          tripInfo['pick_up']
+                                                              .latitude,
+                                                          tripInfo['pick_up']
+                                                              .longitude),
+                                                      driverName:
+                                                          tripInfo['driver'],
+                                                      rating:
+                                                          tripInfo['rating'],
+                                                      rideID:
+                                                          tripInfo.documentID,
+                                                      riders:
+                                                          tripInfo['riders'],
+                                                      carPlate:
+                                                          tripInfo['car_plate'],
+                                                      carType:
+                                                          tripInfo['car_type'],
+                                                      maximumSeats: tripInfo[
+                                                          'maximum_seats'],
+                                                      driverIsMale:
+                                                          tripInfo["is_male"],
+                                                      userID: _authservice
+                                                          .fUser.uid,
+                                                      tripTime:
+                                                          tripInfo['trip_time'],
+                                                    )),
+                                          );
+                                        },
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              image: DecorationImage(
+                                                  image: AssetImage(
+                                                      "assets/fullBackground.jpeg"),
+                                                  fit: BoxFit.fill),
+                                              shape: BoxShape.rectangle,
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(8.0)),
+                                              color: kboxColor),
+                                          margin: EdgeInsets.all(4),
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height /
+                                              5,
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(12.0),
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceEvenly,
+                                              children: <Widget>[
+                                                Text(
+                                                  "Driver: " +
+                                                      tripInfo["driver"],
                                                   style:
-                                                      kupcomingRidesTextStyle),
-                                              Text(
-                                                "To: \n" +
-                                                    tripInfo[
-                                                        "destination_name"],
-                                                style: kupcomingRidesTextStyle,
-                                                textAlign: TextAlign.center,
-                                              ),
-                                              // getUserInfo(riderInfo["user_id"]
-                                              //     .toString()
-                                              //     .substring(7))
-                                            ],
+                                                      kupcomingRidesTextStyle,
+                                                ),
+                                                Text(
+                                                    "From: " +
+                                                        tripInfo[
+                                                            "pick_up_name"],
+                                                    style:
+                                                        kupcomingRidesTextStyle),
+                                                Text(
+                                                  "To: \n" +
+                                                      tripInfo[
+                                                          "destination_name"],
+                                                  style:
+                                                      kupcomingRidesTextStyle,
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                                // getUserInfo(riderInfo["user_id"]
+                                                //     .toString()
+                                                //     .substring(7))
+                                              ],
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -330,7 +384,7 @@ class AppBarClipper extends CustomClipper<Path> {
   @override
   bool shouldReclip(CustomClipper<Path> oldClipper) {
     // TODO: implement shouldReclip
-    return false;
+    return true;
   }
 }
 
@@ -362,33 +416,4 @@ getUserInfo(String userID) {
           return Text(items["age"]);
         }
       });
-}
-
-class CustomButton extends StatelessWidget {
-  const CustomButton(
-      {@required this.onPress,
-      @required this.text,
-      @required this.height,
-      @required this.buttonColor,
-      @required this.width,
-      @required this.textColor});
-
-  final Function onPress;
-  final Color buttonColor;
-  final double width;
-  final double height;
-  final Text text;
-  final Color textColor;
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Material(
-        borderRadius: BorderRadius.circular(20),
-        color: buttonColor,
-        child: MaterialButton(
-            onPressed: onPress, minWidth: width, height: height, child: text),
-      ),
-    );
-  }
 }

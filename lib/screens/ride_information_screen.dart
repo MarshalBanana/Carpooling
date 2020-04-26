@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 import 'package:carpooling/utilities/GPS_util.dart';
 import 'package:carpooling/utilities/http_handler.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import 'home.dart';
 
 HttpHandler httpHandler = new HttpHandler();
 
@@ -94,11 +95,11 @@ class _RideInfoScreenState extends State<RideInfoScreen> {
         })
         .then((doc) {
           print("Joined Ride succesfully!");
-          Alert(
+          showDialog(
             context: context,
-            title: "You have joined the ride succesfully",
-            image: Image.asset("assets/bluetick.gif"),
-          ).show();
+            builder: (context) => getDialog(),
+            barrierDismissible: true,
+          );
         })
         .timeout(Duration(seconds: 2))
         .catchError((error) {
@@ -112,6 +113,28 @@ class _RideInfoScreenState extends State<RideInfoScreen> {
         });
   }
 
+  getDialog() {
+    return AlertDialog(
+      title: Text('Successfully Joined as Driver!'),
+      elevation: 24.0,
+      backgroundColor: Colors.white,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      actions: <Widget>[
+        CustomButton(
+          width: MediaQuery.of(context).size.width / 3,
+          height: MediaQuery.of(context).size.height / 16,
+          buttonColor: Colors.red,
+          onPress: () {
+            Navigator.pop(context, 1);
+            Navigator.pop(context, 1);
+          },
+          text: Text('Awesome!'),
+          textColor: Colors.white,
+        ),
+      ],
+    );
+  }
+
   void assignDriver() async {
     final Firestore _db = Firestore.instance;
     AuthService _authService = AuthService();
@@ -122,28 +145,22 @@ class _RideInfoScreenState extends State<RideInfoScreen> {
     //We get users info first
     String signedInUserID = _authService.fUser.uid;
     //then we get the user info from the user collection using the refernce of user ID
-    Map<String, dynamic> userInfo =
-          new Map<String, dynamic>();
-      print("user info" + userInfo.toString());
+    Map<String, dynamic> userInfo = new Map<String, dynamic>();
+    print("user info" + userInfo.toString());
 
-      await _db
-          .collection('users')
-          .document(signedInUserID)
-          .get()
-          .then((value) {
-        userInfo.addAll(value.data);
-        print("value" + value.data.toString());
-        print("user info" + userInfo.toString());
-        return userInfo;
-      });
-    
+    await _db.collection('users').document(signedInUserID).get().then((value) {
+      userInfo.addAll(value.data);
+      print("value" + value.data.toString());
+      print("user info" + userInfo.toString());
+      return userInfo;
+    });
+
     await _db
         .collection("scheduled_rides")
         .document(widget.rideID)
         .updateData({
           'driverid': userInfo['id'].toString(),
-          'phone_number':
-              userInfo['phone_number'].toString(),
+          'phone_number': userInfo['phone_number'].toString(),
           'age': userInfo["age"].toString(),
           'is_male': userInfo["is_male"].toString(),
           'rating': userInfo["rating"].toString(),
@@ -151,17 +168,13 @@ class _RideInfoScreenState extends State<RideInfoScreen> {
           'driver': userInfo['firstname'].toString() +
               " " +
               userInfo['lastname'].toString(),
-          'maximum_seats': 4.toString(),
-          'car_plate': "420 BLZ",
-          'car_type': "Lexus A series",
+          'maximum_seats': userInfo["maximum_seats"],
+          'car_plate': userInfo["car_plate"],
+          'car_type': userInfo["car_type"],
         })
         .then((doc) {
           print("Assigned yourself as Rider!");
-          Alert(
-            context: context,
-            title: "You are the driver of this ride",
-            image: Image.asset("assets/bluetick.gif"),
-          ).show();
+          showDialog(context: context, builder: (context) => getDialog());
         })
         .timeout(Duration(seconds: 2))
         .catchError((error) {
@@ -193,13 +206,17 @@ class _RideInfoScreenState extends State<RideInfoScreen> {
               child: ClipPath(
                 clipper: AppBarClipper(),
                 child: AppBar(
-                  automaticallyImplyLeading: true,
+                  flexibleSpace: Image(
+                    image: AssetImage('assets/fullBackground.jpeg'),
+                    fit: BoxFit.cover,
+                  ),
                   backgroundColor: kappBarColor,
+                  automaticallyImplyLeading: true,
                   title: Padding(
                     padding: EdgeInsets.only(top: 20, left: 20),
                     child: Text(
                       'Ride Information',
-                      textAlign: TextAlign.left,
+                      textAlign: TextAlign.center,
                       style: TextStyle(fontFamily: 'Montserrat', fontSize: 24),
                     ),
                   ),
@@ -289,14 +306,13 @@ class _RideInfoScreenState extends State<RideInfoScreen> {
               ),
               Container(
                 child: CustomButton(
-                  buttonColor: kforwardButtonColor,
+                  buttonColor: kindigoThemeColor,
                   onPress: () {
-                    if(widget.driverName == "N/A"){
+                    if (widget.driverName == "N/A") {
                       setState(() {
                         assignDriver();
                       });
-                    }
-                    else{
+                    } else {
                       setState(() {
                         joinRide();
                         widget.driverName;
@@ -307,14 +323,14 @@ class _RideInfoScreenState extends State<RideInfoScreen> {
                     (widget.driverName == "N/A")
                         ? 'Become Driver For This Ride'
                         : 'Join This Ride',
-                        textAlign: TextAlign.center,
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                         fontFamily: 'Montserrat',
                         fontSize: 20,
                         fontWeight: FontWeight.w600),
                   ),
                   height: MediaQuery.of(context).size.height / 6,
-                  textColor: Colors.black,
+                  textColor: Colors.white,
                   width: double.infinity,
                 ),
               ),

@@ -52,6 +52,7 @@ class AuthService {
 
   Future<FirebaseUser> emailSignIn(String email, String password) async {
     isBusy = true;
+
     AuthResult result = await _auth.signInWithEmailAndPassword(
         email: email, password: password);
 

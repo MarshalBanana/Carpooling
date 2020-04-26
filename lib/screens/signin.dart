@@ -3,6 +3,7 @@ import 'package:carpooling/utilities/auth_service.dart';
 import 'package:carpooling/utilities/constants.dart';
 import 'package:carpooling/utilities/utilities.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 //import 'package:rest_app/services/auth_services.dart';
 //import 'package:local_auth/local_auth.dart';
@@ -10,6 +11,7 @@ import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'loading_screen.dart';
+import 'signup.dart';
 
 class SignInScreen extends StatefulWidget {
   final Function toogleView;
@@ -213,24 +215,69 @@ class _SignInScreenState extends State<SignInScreen> {
                                     ),
                                     GestureDetector(
                                       onTap: () async {
-                                        setState(() {
-                                          _loading = true;
-                                        });
 //                                        final user = await _auth
 //                                            .signInWithEmailAndPassword(
 //                                                email: email.trim(),
 //                                                password: password);
 //                                        user = await _authService.emailSignIn(
 //                                            email.trim(), password);
-                                        user = await _authService.emailSignIn(
-                                            'testemail6@email.com', '123456');
-                                        print(user.uid);
+
+                                        setState(() {
+                                          _loading = true;
+                                        });
+
+                                        try {
+                                          if (email.length > 0 &&
+                                              password.length > 0) {
+                                            user = await _authService
+                                                .emailSignIn(email, password)
+                                                .timeout(Duration(seconds: 3))
+                                                .catchError((onError) {
+                                              print(onError.toString());
+                                            });
+                                          } else {
+                                            Fluttertoast.showToast(
+                                                msg:
+                                                    "Please fill in the required info",
+                                                toastLength: Toast.LENGTH_SHORT,
+                                                gravity: ToastGravity.CENTER,
+                                                timeInSecForIosWeb: 1,
+                                                backgroundColor: Colors.red,
+                                                textColor: Colors.white,
+                                                fontSize: 16.0);
+                                            setState(() {
+                                              _loading = false;
+                                            });
+                                            return;
+                                          }
+                                        } catch (e) {
+                                          print(e);
+                                          setState(() {
+                                            _loading = false;
+                                          });
+                                          return;
+                                        }
+//                                        print(user.uid);
                                         if (user != null) {
                                           Navigator.push(
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
                                                       LoadingScreen()));
+                                        } else {
+                                          Fluttertoast.showToast(
+                                              msg:
+                                                  "Incorrect Email and Password combination",
+                                              toastLength: Toast.LENGTH_SHORT,
+                                              gravity: ToastGravity.CENTER,
+                                              timeInSecForIosWeb: 1,
+                                              backgroundColor: Colors.red,
+                                              textColor: Colors.white,
+                                              fontSize: 16.0);
+                                          setState(() {
+                                            _loading = false;
+                                          });
+                                          return;
                                         }
                                         setState(() {
                                           _loading = false;
@@ -295,7 +342,10 @@ class _SignInScreenState extends State<SignInScreen> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                Navigator.pop(context);
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => SignUpScreen()));
                               },
                               child: Text(
                                 "Don't have an account?",

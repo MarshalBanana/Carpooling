@@ -32,7 +32,7 @@ class ScheduledRidesWithDriver extends StatelessWidget {
                   title: Padding(
                     padding: EdgeInsets.only(top: 20, left: 20),
                     child: Text(
-                      'Ride in one of These',
+                      'Rides starting near you',
                       textAlign: TextAlign.center,
                       style: TextStyle(fontFamily: 'Montserrat', fontSize: 24),
                     ),

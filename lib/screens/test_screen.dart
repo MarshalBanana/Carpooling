@@ -5,6 +5,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import 'home.dart';
+
 class TestScreen extends StatefulWidget {
   @override
   _TestScreenState createState() => _TestScreenState();
@@ -161,34 +163,6 @@ class MyCustomPainter extends CustomPainter {
   @override
   bool shouldRepaint(CustomPainter oldDelegate) {
     // TODO: implement shouldRepaint
-    return true;
-  }
-}
-
-class AppBarClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    Path p = Path();
-    p.lineTo(size.width, 0);
-    p.lineTo(size.width, size.height / 1.5);
-//    p.cubicTo(0, 42, 20, 40, double.infinity, 42);
-    p.cubicTo(
-      size.width / 1.6,
-      3 * size.height / 2.1,
-      3 * size.width / 8,
-      size.height / 1.6,
-      0,
-      size.height / 1.5,
-    );
-    p.lineTo(0, 0);
-//    p.lineTo(0, 0);
-    p.close();
-    return p;
-  }
-
-  @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) {
-    // TODO: implement shouldReclip
     return true;
   }
 }

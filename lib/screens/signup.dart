@@ -3,6 +3,7 @@ import 'package:carpooling/utilities/auth_service.dart';
 import 'package:carpooling/utilities/constants.dart';
 import 'package:carpooling/utilities/utilities.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 //import 'package:rest_app/screens/signin.dart';
 //import 'package:rest_app/services/auth_services.dart';
@@ -22,8 +23,9 @@ enum Gender { Male, Female }
 class _SignUpScreenState extends State<SignUpScreen> {
   final _auth = FirebaseAuth.instance;
   final _formKey = GlobalKey<FormState>();
-  String _email, _password;
-  String _phoneNo;
+  String _email = "";
+  String _password = "";
+  String _phoneNo = "";
 //  String VerCode;
 //  String VerId;
 
@@ -38,11 +40,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   bool _loading = false;
 
-  int _age;
+  int _age = 0;
 
-  String _firstName;
+  String _firstName = "";
 
-  String _lastName;
+  String _lastName = "";
 
   Gender _gender;
 
@@ -184,7 +186,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     decoration: kTextFieldDecoration.copyWith(
                                         hintText: 'Age'),
                                     onChanged: (value) {
-                                      _age = value;
+                                      _age = int.parse(value);
                                     },
                                   ),
                                   SizedBox(
@@ -241,48 +243,96 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                         setState(() {
                                           _loading = true;
                                         });
-//                                        user = await _authService.emailSignUp(
-//                                            _email, _password);
-//                                        user = await _authService.createNewUser(
-//                                            _email,
-//                                            _password,
-//                                            _firstName,
-//                                            _lastName,
-//                                            _age,
-//                                            _phoneNo,
-//                                            _gender);
-                                        user = await _authService.createNewUser(
-                                          'ahmedemail@email.com',
-                                          '123456',
-                                          'ahmed',
-                                          'robah',
-                                          25,
-                                          '5554567891',
-                                          Gender.Male,
-                                        );
+                                        print(_email +
+                                            " " +
+                                            _password +
+                                            " " +
+                                            _firstName +
+                                            " " +
+                                            _lastName +
+                                            " " +
+                                            _phoneNo +
+                                            " " +
+                                            _age.toString() +
+                                            " " +
+                                            _gender.toString());
+                                        if (_email.length > 0 &&
+                                            _password.length > 0 &&
+                                            _firstName.length > 0 &&
+                                            _lastName.length > 0 &&
+                                            _phoneNo.length > 0 &&
+                                            _age > 0 &&
+                                            _gender != null) {
+                                          if (_password.length < 6) {
+                                            Fluttertoast.showToast(
+                                                msg:
+                                                    "Password must be more than 6 characters",
+                                                toastLength: Toast.LENGTH_SHORT,
+                                                gravity: ToastGravity.CENTER,
+                                                timeInSecForIosWeb: 1,
+                                                backgroundColor: Colors.red,
+                                                textColor: Colors.white,
+                                                fontSize: 16.0);
+                                            setState(() {
+                                              _loading = false;
+                                            });
+                                            return;
+                                          }
+                                          user =
+                                              await _authService.createNewUser(
+                                                  _email,
+                                                  _password,
+                                                  _firstName,
+                                                  _lastName,
+                                                  _age,
+                                                  _phoneNo,
+                                                  _gender);
+                                          if (user != null) {
+                                            print(user.email);
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    LoadingScreen(),
+                                              ),
+                                            );
+                                          } else {
+                                            Fluttertoast.showToast(
+                                                msg: "Error 254",
+                                                toastLength: Toast.LENGTH_SHORT,
+                                                gravity: ToastGravity.CENTER,
+                                                timeInSecForIosWeb: 1,
+                                                backgroundColor: Colors.red,
+                                                textColor: Colors.white,
+                                                fontSize: 16.0);
+                                            setState(() {
+                                              _loading = false;
+                                            });
+                                          }
+                                        } else {
+                                          Fluttertoast.showToast(
+                                              msg:
+                                                  "Please fill in the required info",
+                                              toastLength: Toast.LENGTH_SHORT,
+                                              gravity: ToastGravity.CENTER,
+                                              timeInSecForIosWeb: 1,
+                                              backgroundColor: Colors.red,
+                                              textColor: Colors.white,
+                                              fontSize: 16.0);
+                                          setState(() {
+                                            _loading = false;
+                                          });
+                                        }
+
 //                                          final newUser = await _auth
 //                                              .createUserWithEmailAndPassword(
 //                                                  email: email.trim(),
 //                                                  password: password);
 
-                                        if (user != null) {
-                                          print(user.email);
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  LoadingScreen(),
-                                            ),
-                                          );
-                                        }
-
                                         setState(() {
                                           _loading = false;
                                         });
                                       } catch (e) {
-                                        setState(() {
-                                          _loading = false;
-                                        });
                                         print('below error from: signup');
                                         print(e);
                                       }

@@ -3,6 +3,8 @@ import 'package:carpooling/utilities/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import '../utilities/utilities.dart';
+
 class ChangeInfoScreen extends StatefulWidget {
   ChangeInfoScreen(
       {Key key,

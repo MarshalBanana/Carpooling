@@ -150,7 +150,7 @@ class _MapState extends State<Map> {
             ),
             BottomNavyBarItem(
                 icon: Icon(Icons.people),
-                title: Text('Scheduled Rides Without a Driver'),
+                title: Text('Drive'),
                 activeColor: Colors.purpleAccent),
             // BottomNavyBarItem(
             //     icon: Icon(Icons.notifications),
@@ -158,7 +158,7 @@ class _MapState extends State<Map> {
             //     activeColor: Colors.pink),
             BottomNavyBarItem(
                 icon: Icon(Icons.directions_car),
-                title: Text('Scheduled Rides With a Driver'),
+                title: Text('Ride'),
                 activeColor: Colors.pink),
             BottomNavyBarItem(
                 icon: Icon(Icons.settings),

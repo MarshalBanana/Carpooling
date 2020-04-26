@@ -10,18 +10,22 @@ import 'package:google_maps_webservice/places.dart';
 class AppState with ChangeNotifier {
   static LatLng _initialPosition;
   LatLng _lastPosition = _initialPosition;
+  LatLng _pickupPosition = _initialPosition;
   GoogleMapsServices _googleMapsServices = GoogleMapsServices();
   GoogleMapController _mapController;
   TextEditingController locationController = TextEditingController();
   TextEditingController destinationController = TextEditingController();
   bool locationServiceActive = true;
-  GoogleMapsPlaces _places = GoogleMapsPlaces(apiKey: "AIzaSyAS6yFOpTAblkIYrYIxKsFpRP9caH58MYc");
-  Prediction prediction ;
+  GoogleMapsPlaces _places =
+      GoogleMapsPlaces(apiKey: "AIzaSyAS6yFOpTAblkIYrYIxKsFpRP9caH58MYc");
+  Prediction prediction;
+  Prediction pickupPrediction;
 
   LatLng get initialPosition => _initialPosition;
   LatLng get lastPosition => _lastPosition;
+  LatLng get pickupPosition => _pickupPosition;
   GoogleMapsServices get googleMapsServices => _googleMapsServices;
-  GoogleMapController get mapController => _mapController; 
+  GoogleMapController get mapController => _mapController;
   Set<Marker> get markers => _markers;
   Set<Polyline> get polylines => _polyLines;
   GoogleMapsPlaces get places => _places;
@@ -45,9 +49,10 @@ class AppState with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<LatLng> getCurrentLocation() async{
-    Position p = await Geolocator().getCurrentPosition(desiredAccuracy:LocationAccuracy.high);
-    return  LatLng(p.latitude,p.longitude);
+  Future<LatLng> getCurrentLocation() async {
+    Position p = await Geolocator()
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    return LatLng(p.latitude, p.longitude);
   }
 
 // TO CREATE AND DRAW THE ROUTE FROM ONE POINT TO THE OTHER
@@ -66,7 +71,7 @@ class AppState with ChangeNotifier {
         position: location,
         infoWindow: InfoWindow(title: address, snippet: "destination"),
         icon: BitmapDescriptor.defaultMarker));
-        notifyListeners();
+    notifyListeners();
   }
 
   // THIS METHOD WILL CONVERT DOUBLES INTO LATLNG IN ORDER TO USE THEM AS COORDINATES
@@ -131,7 +136,7 @@ class AppState with ChangeNotifier {
   void sendRequest(String userDistenation) async {
     List<Placemark> placemark =
         await Geolocator().placemarkFromAddress(userDistenation);
-        print(placemark.toString());
+    print(placemark.toString());
     // double latitude = placemark[0].position.latitude;
     // double longitude = placemark[0].position.longitude;
     // LatLng destination = LatLng(latitude, longitude);
@@ -139,7 +144,7 @@ class AppState with ChangeNotifier {
     // get detail (lat/lng)
     PlacesDetailsResponse detail =
         await _places.getDetailsByPlaceId(prediction.placeId);
-        print(detail.toString());
+    print(detail.toString());
     final lat = detail.result.geometry.location.lat;
     final lng = detail.result.geometry.location.lng;
     LatLng destination = LatLng(lat, lng);
@@ -150,13 +155,38 @@ class AppState with ChangeNotifier {
     //     initialPosition, destination);
     // print("$lat,$lng");
     // createRoute(route);
-  notifyListeners();
+    notifyListeners();
+  }
+
+  void sendRequestPickup(String userPickup) async {
+    List<Placemark> placemark =
+        await Geolocator().placemarkFromAddress(userPickup);
+    print(placemark.toString());
+    // double latitude = placemark[0].position.latitude;
+    // double longitude = placemark[0].position.longitude;
+    // LatLng destination = LatLng(latitude, longitude);
+
+    // get detail (lat/lng)
+    PlacesDetailsResponse detail =
+        await _places.getDetailsByPlaceId(prediction.placeId);
+    print(detail.toString());
+    final lat = detail.result.geometry.location.lat;
+    final lng = detail.result.geometry.location.lng;
+    LatLng pickup = LatLng(lat, lng);
+    _pickupPosition = pickup;
+    _addMarker(pickup, userPickup);
+    _addMarker(pickup, userPickup);
+    // String route = await _googleMapsServices.getRouteCoordinates(
+    //     initialPosition, destination);
+    // print("$lat,$lng");
+    // createRoute(route);
+    notifyListeners();
   }
 
 // CLEAR MARKERS
-void clearMarkers(){
- _markers = {};
-}  
+  void clearMarkers() {
+    _markers = {};
+  }
 
 // ON CAMERA MOVE
   void onCameraMove(CameraPosition position) {
@@ -170,48 +200,44 @@ void clearMarkers(){
     notifyListeners();
   }
 
-    // This is for displaying the ride information on the map of the ride info screen ie. begin, end, and route between them
-  void onCreatedRideInfo(LatLng initial,LatLng destination) async {
+  // This is for displaying the ride information on the map of the ride info screen ie. begin, end, and route between them
+  void onCreatedRideInfo(LatLng initial, LatLng destination) async {
     // markers.remove(markers.last);
-      _markers = {};
-     _addMarker(initial, "initial");
-     _addMarker(destination, "destination");
+    _markers = {};
+    _addMarker(initial, "initial");
+    _addMarker(destination, "destination");
     // print("*"*80);
     // print("*"*80);
     // print("*"*80);
     // print("*"*80);
     // String route = await _googleMapsServices.getRouteCoordinates(
     //       initialPosition, destination);
-      //print("$lat,$lng");
-      //createRoute(route);
+    //print("$lat,$lng");
+    //createRoute(route);
     notifyListeners();
   }
 
-
-
   //  LOADING INITIAL POSITION
-  void _loadingInitialPosition()async{
+  void _loadingInitialPosition() async {
     await Future.delayed(Duration(seconds: 3)).then((v) {
-      if(_initialPosition == null){
+      if (_initialPosition == null) {
         locationServiceActive = false;
         notifyListeners();
       }
     });
-
   }
-
-
 
   void displayPrediction(Prediction prediction) async {
     if (prediction != null) {
       PlacesDetailsResponse detail =
-      await _places.getDetailsByPlaceId(prediction.placeId);
+          await _places.getDetailsByPlaceId(prediction.placeId);
 
       var placeId = prediction.placeId;
       double lat = detail.result.geometry.location.lat;
       double lng = detail.result.geometry.location.lng;
       LatLng place = LatLng(lat, lng);
-      var address = await Geocoder.local.findAddressesFromQuery(prediction.description);
+      var address =
+          await Geocoder.local.findAddressesFromQuery(prediction.description);
       print(address);
       _addMarker(place, "place");
       print(lat);
@@ -221,7 +247,7 @@ void clearMarkers(){
   }
 
   Future<void> getOLocationAutoCOmplete(BuildContext context) async {
-        prediction = await PlacesAutocomplete.show(
+    prediction = await PlacesAutocomplete.show(
         context: context,
         apiKey: apiKey,
         mode: Mode.overlay, // Mode.fullscreen
@@ -229,6 +255,18 @@ void clearMarkers(){
         components: [new Component(Component.country, "sa")]);
 
     destinationController.text = prediction.description;
+    notifyListeners();
+  }
+
+  Future<void> getOLocationAutoCompletePickup(BuildContext context) async {
+    pickupPrediction = await PlacesAutocomplete.show(
+        context: context,
+        apiKey: apiKey,
+        mode: Mode.overlay, // Mode.fullscreen
+        language: "en",
+        components: [new Component(Component.country, "sa")]);
+
+    locationController.text = pickupPrediction.description;
     notifyListeners();
   }
 }

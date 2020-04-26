@@ -8,6 +8,7 @@ import 'package:carpooling/utilities/utilities.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'home.dart';
 import 'past_rides_screen.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -85,9 +86,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             double.infinity,
             MediaQuery.of(context).size.height / 6,
           )),
-      body: Container(
-          //height: double.maxFinite,
-          child: Column(
+      body: Column(
         children: <Widget>[
           SizedBox(
             height: 15,
@@ -100,78 +99,80 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   fontSize: 17,
                   fontWeight: FontWeight.w600)),
           yetAnotherFutureBuilder(),
-          ListView(
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              children: <Widget>[
-                // ListTile(
-                //   isThreeLine: true,
-                //   leading: Icon(Icons.person),
-                //   title: Text("Email"),
-                //   subtitle: Text(
-                //       userInfo['email']),
-                // ),
+          Center(
+            child: ListView(
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                children: <Widget>[
+                  // ListTile(
+                  //   isThreeLine: true,
+                  //   leading: Icon(Icons.person),
+                  //   title: Text("Email"),
+                  //   subtitle: Text(
+                  //       userInfo['email']),
+                  // ),
 
-                CustomButton(
-                    text: Text("Your Upcoming Rides",
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontFamily: 'Montserrat',
-                            fontSize: 17,
-                            fontWeight: FontWeight.w600)),
-                    width: double.infinity,
-                    textColor: Colors.white,
-                    buttonColor: kindigoThemeColor,
-                    height: MediaQuery.of(context).size.height / 16,
-                    onPress: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => UpcomingRidesScreen()));
-                    }),
-                CustomButton(
-                    text: Text("Your Past Rides",
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontFamily: 'Montserrat',
-                            fontSize: 17,
-                            fontWeight: FontWeight.w600)),
-                    width: double.infinity,
-                    textColor: Colors.white,
-                    buttonColor: kindigoThemeColor,
-                    height: MediaQuery.of(context).size.height / 16,
-                    onPress: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => PastRidesScreen()));
-                    }),
-                CustomButton(
-                    text: Text("Logout",
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontFamily: 'Montserrat',
-                            fontSize: 17,
-                            fontWeight: FontWeight.w600)),
-                    width: double.infinity,
-                    textColor: Colors.white,
-                    buttonColor: Colors.red,
-                    height: MediaQuery.of(context).size.height / 16,
-                    onPress: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) => getDialog(),
-                        barrierDismissible: true,
-                      );
+                  CustomButton(
+                      text: Text("Your Upcoming Rides",
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontFamily: 'Montserrat',
+                              fontSize: 17,
+                              fontWeight: FontWeight.w600)),
+                      width: double.infinity,
+                      textColor: Colors.white,
+                      buttonColor: kindigoThemeColor,
+                      height: MediaQuery.of(context).size.height / 16,
+                      onPress: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => UpcomingRidesScreen()));
+                      }),
+                  CustomButton(
+                      text: Text("Your Past Rides",
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontFamily: 'Montserrat',
+                              fontSize: 17,
+                              fontWeight: FontWeight.w600)),
+                      width: double.infinity,
+                      textColor: Colors.white,
+                      buttonColor: kindigoThemeColor,
+                      height: MediaQuery.of(context).size.height / 16,
+                      onPress: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => PastRidesScreen()));
+                      }),
+                  CustomButton(
+                      text: Text("Logout",
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontFamily: 'Montserrat',
+                              fontSize: 17,
+                              fontWeight: FontWeight.w600)),
+                      width: double.infinity,
+                      textColor: Colors.white,
+                      buttonColor: Colors.red,
+                      height: MediaQuery.of(context).size.height / 16,
+                      onPress: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => getDialog(),
+                          barrierDismissible: true,
+                        );
 
 //                      logout();
-                    })
-              ])
+                      })
+                ]),
+          )
         ],
-      )),
+      ),
     );
   }
 
@@ -234,53 +235,98 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   getSomeFutureInfo() {
-    return Column(
-      children: <Widget>[
-        ListTile(
-          isThreeLine: true,
-          leading: Icon(Icons.person),
-          title: Text("Full Name"),
-          subtitle: Text(userInfo['firstname'] + " " + userInfo['lastname']),
-          onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => ChangeInfoScreen(
-                          hintText: "Enter Your Full Name",
-                          titleText: "Update Your Name",
-                          descriptionText:
-                              "Your name makes it easy for the Drivers to confirm who they pick up",
-                          userID: userInfo['id'],
-                          fieldToChange: "name",
-                        )));
-          },
-        ),
-        ListTile(
-          isThreeLine: true,
-          leading: Icon(Icons.phone_android),
-          title: Text("Phone Number"),
-          subtitle: Text(userInfo['phone_number']),
-          onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => ChangeInfoScreen(
-                          hintText: "Enter Your Phone Number",
-                          titleText: "Update Your Number",
-                          descriptionText:
-                              "Your number makes it easy for the Drivers to contact you",
-                          userID: userInfo['id'],
-                          fieldToChange: "phone_number",
-                        )));
-          },
-        ),
-        ListTile(
-          isThreeLine: true,
-          leading: Icon(Icons.star),
-          title: Text("Your Rating"),
-          subtitle: Text(userInfo['rating'].toString()),
-        ),
-      ],
+    return Container(
+      height: MediaQuery.of(context).size.height / 2.5,
+      child: ListView(
+        children: <Widget>[
+          ListTile(
+            isThreeLine: true,
+            leading: Icon(Icons.person),
+            title: Text("Full Name"),
+            subtitle: Text(userInfo['firstname'] + " " + userInfo['lastname']),
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ChangeInfoScreen(
+                            hintText: "Enter Your Full Name",
+                            titleText: "Update Your Name",
+                            descriptionText:
+                                "Your name makes it easy for the Drivers to confirm who they pick up",
+                            userID: userInfo['id'],
+                            fieldToChange: "name",
+                          )));
+            },
+          ),
+          ListTile(
+            isThreeLine: true,
+            leading: Icon(Icons.phone_android),
+            title: Text("Phone Number"),
+            subtitle: Text(userInfo['phone_number']),
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ChangeInfoScreen(
+                            hintText: "Enter Your Phone Number",
+                            titleText: "Update Your Number",
+                            descriptionText:
+                                "Your number makes it easy for the Drivers to contact you",
+                            userID: userInfo['id'],
+                            fieldToChange: "phone_number",
+                          )));
+            },
+          ),
+          ListTile(
+            isThreeLine: true,
+            leading: Icon(Icons.star),
+            title: Text("Your Rating"),
+            subtitle: Text(userInfo['rating'].toString()),
+          ),
+          ListTile(
+            isThreeLine: true,
+            leading: Icon(Icons.credit_card),
+            title: Text("Car Plate"),
+            subtitle: Text((userInfo['car_plate'] != null)
+                ? userInfo['car_plate']
+                : "Please update car plate"),
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ChangeInfoScreen(
+                            hintText: "Enter Your Car Plate Number",
+                            titleText: "Update Your Car Plate Number Number",
+                            descriptionText:
+                                "Your car plate number allows you to register as driver",
+                            userID: userInfo['id'],
+                            fieldToChange: "car_plate",
+                          )));
+            },
+          ),
+          ListTile(
+            isThreeLine: true,
+            leading: Icon(Icons.directions_car),
+            title: Text("Car Type"),
+            subtitle: Text((userInfo['car_type'] != null)
+                ? userInfo['car_type']
+                : "Please update car type"),
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ChangeInfoScreen(
+                            hintText: "Enter Your Car Type",
+                            titleText: "Update Your car type",
+                            descriptionText:
+                                "Your number makes it easy for the riders to recognize you",
+                            userID: userInfo['id'],
+                            fieldToChange: "car_type",
+                          )));
+            },
+          ),
+        ],
+      ),
     );
   }
 
