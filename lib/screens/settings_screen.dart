@@ -1,4 +1,5 @@
 import 'package:carpooling/screens/change_info_screen.dart';
+import 'package:carpooling/screens/signin.dart';
 import 'package:carpooling/screens/test_screen.dart';
 import 'package:carpooling/screens/upcoming_rides_screen.dart';
 import 'package:carpooling/utilities/auth_service.dart';
@@ -191,6 +192,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
               onPress: () {
                 logout();
                 Navigator.pop(context, 1);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SignInScreen()),
+                );
               },
               text: Text('Yes'),
               textColor: Colors.white,

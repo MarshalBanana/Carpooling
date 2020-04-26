@@ -198,7 +198,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                       },
                                       child: Container(
                                         decoration: BoxDecoration(
-                                            image: DecorationImage(image: AssetImage("assets/fullBackground.jpeg"),fit:BoxFit.fill),
+                                            image: DecorationImage(
+                                                image: AssetImage(
+                                                    "assets/fullBackground.jpeg"),
+                                                fit: BoxFit.fill),
                                             shape: BoxShape.rectangle,
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(8.0)),
@@ -211,12 +214,22 @@ class _HomeScreenState extends State<HomeScreen> {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceEvenly,
                                             children: <Widget>[
-                                              Text("Driver: " +
-                                                  tripInfo["driver"],style: kupcomingRidesTextStyle,),
-                                              Text("From: " +
-                                                  tripInfo["pick_up_name"],style: kupcomingRidesTextStyle),
-                                              Text("To: \n" +
-                                                  tripInfo["destination_name"],style: kupcomingRidesTextStyle,textAlign: TextAlign.center,),
+                                              Text(
+                                                "Driver: " + tripInfo["driver"],
+                                                style: kupcomingRidesTextStyle,
+                                              ),
+                                              Text(
+                                                  "From: " +
+                                                      tripInfo["pick_up_name"],
+                                                  style:
+                                                      kupcomingRidesTextStyle),
+                                              Text(
+                                                "To: \n" +
+                                                    tripInfo[
+                                                        "destination_name"],
+                                                style: kupcomingRidesTextStyle,
+                                                textAlign: TextAlign.center,
+                                              ),
                                               // getUserInfo(riderInfo["user_id"]
                                               //     .toString()
                                               //     .substring(7))
@@ -291,10 +304,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   AuthService auth;
-  logout() {
-    print('in logout in home.dart');
-    auth.signOut();
-  }
 }
 
 class AppBarClipper extends CustomClipper<Path> {
